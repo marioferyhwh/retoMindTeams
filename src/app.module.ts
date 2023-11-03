@@ -14,7 +14,14 @@ import { UsersModule } from './users/users.module';
     ConfigModule.forRoot({
       envFilePath: environment[process.env.NODE_ENV] || '.env',
       load: [config],
-      validationSchema: Joi.object({}),
+      validationSchema: Joi.object({
+        MONGO_ROOT_USERNAME: Joi.string().required(),
+        MONGO_ROOT_PASSWORD: Joi.string().required(),
+        MONGO_DATABASE_NAME: Joi.string().required(),
+        MONGO_PORT: Joi.number().default(27017),
+        MONGO_HOST: Joi.string().default('localhost'),
+        MONGO_CONNECTION: Joi.string().default('mongodb'),
+      }),
       isGlobal: true,
     }),
     UsersModule,
