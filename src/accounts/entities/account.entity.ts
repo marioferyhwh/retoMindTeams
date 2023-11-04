@@ -1,7 +1,15 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 
-@Schema()
+@Schema({
+  toJSON: {
+    transform: (_document, returnObject) => {
+      returnObject.id = returnObject._id;
+      delete returnObject.__v;
+      delete returnObject._id;
+    },
+  },
+})
 export class Account extends Document {
   @Prop({ required: true, unique: true })
   nameAccount: string;

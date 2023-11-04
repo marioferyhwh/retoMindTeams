@@ -4,6 +4,7 @@ import { Model } from 'mongoose';
 
 import {
   CreateAccountDto,
+  CreateAccountResponseDto,
   QueryGetAccountsDto,
   UpdateAccountDto,
 } from 'src/accounts/dto/accounts.dto';
@@ -29,7 +30,7 @@ export class AccountsService {
     return await accountModelFind.exec();
   }
 
-  async getAccountById(id: string) {
+  async getAccountById(id: string): Promise<Account> {
     const account = await this.accountModel.findById(id).exec();
     if (!account) {
       throw new NotFoundException('Account not found');
@@ -37,12 +38,18 @@ export class AccountsService {
     return account;
   }
 
-  createAccount(account: CreateAccountDto): any {
+  async createAccount(
+    account: CreateAccountDto,
+  ): Promise<CreateAccountResponseDto> {
     const newAccount = new this.accountModel(account);
-    return newAccount.save();
+    const saveAccount = await newAccount.save();
+    return saveAccount.toJSON();
   }
 
-  async updateAccountById(id: string, account: UpdateAccountDto) {
+  async updateAccountById(
+    id: string,
+    account: UpdateAccountDto,
+  ): Promise<Account> {
     const accountNew = await this.accountModel
       .findByIdAndUpdate(id, { $set: account }, { new: true })
       .exec();
@@ -52,7 +59,7 @@ export class AccountsService {
     return accountNew.save();
   }
 
-  async deleteAccountById(id: string) {
+  async deleteAccountById(id: string): Promise<Account> {
     const accountOld = await this.accountModel.findByIdAndRemove(id).exec();
     if (!accountOld) {
       throw new NotFoundException('Account not found');

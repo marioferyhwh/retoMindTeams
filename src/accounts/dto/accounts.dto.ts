@@ -1,6 +1,7 @@
 import { ApiProperty, PartialType } from '@nestjs/swagger';
 
 import {
+  IsMongoId,
   IsNotEmpty,
   IsOptional,
   IsPositive,
@@ -38,3 +39,10 @@ export class CreateAccountDto {
 }
 
 export class UpdateAccountDto extends PartialType(CreateAccountDto) {}
+
+export class CreateAccountResponseDto extends CreateAccountDto {
+  @IsMongoId()
+  @IsNotEmpty()
+  @ApiProperty({ example: 'dasfasfas123123123f' })
+  readonly id: string;
+}

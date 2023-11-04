@@ -19,6 +19,7 @@ import {
 
 import {
   CreateAccountDto,
+  CreateAccountResponseDto,
   QueryGetAccountsDto,
   UpdateAccountDto,
 } from 'src/accounts/dto/accounts.dto';
@@ -26,6 +27,7 @@ import { AccountsService } from 'src/accounts/services/accounts.service';
 import { Roles } from 'src/auth/decorators/roles.decorator';
 import { Role } from 'src/auth/models/roles.model';
 import { MongoIdPipe } from 'src/common/mongo-id/mongo-id.pipe';
+import { Account } from '../entities/account.entity';
 
 @ApiTags('Accounts')
 @Controller()
@@ -37,14 +39,16 @@ export class AccountsController {
   @ApiOperation({
     summary: 'create account',
   })
-  postAccount(@Body() account: CreateAccountDto) {
+  postAccount(
+    @Body() account: CreateAccountDto,
+  ): Promise<CreateAccountResponseDto> {
     return this.accountService.createAccount(account);
   }
 
   @Get(GET_ACCOUNT)
   @Roles(Role.SuperAdmin, Role.Admin)
   @ApiOperation({ summary: 'list Accounts' })
-  getAccounts(@Query() params: QueryGetAccountsDto) {
+  getAccounts(@Query() params: QueryGetAccountsDto): Promise<Account[]> {
     return this.accountService.getAllAccountsByQuery(params);
   }
 

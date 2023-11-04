@@ -58,7 +58,7 @@ export class UsersService {
     return saveUser.toJSON();
   }
 
-  async deleteUserById(id: string) {
+  async deleteUserById(id: string): Promise<User> {
     //TODO validate if can delete
     const userOld = await this.userModel.findByIdAndRemove(id).exec();
     if (!userOld) {
