@@ -8,7 +8,7 @@ import {
   Put,
   Query,
 } from '@nestjs/common';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import {
   DELETE_ACCOUNT_BY_ID,
   GET_ACCOUNT,
@@ -30,6 +30,7 @@ import { MongoIdPipe } from 'src/common/mongo-id/mongo-id.pipe';
 import { Account } from '../entities/account.entity';
 
 @ApiTags('Accounts')
+@ApiBearerAuth()
 @Controller()
 export class AccountsController {
   constructor(private accountService: AccountsService) {}

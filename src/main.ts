@@ -3,10 +3,10 @@ import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 
-const version = 'api/v1';
+const version = 'v1';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  app.setGlobalPrefix(version);
+  app.setGlobalPrefix(`api/${version}`);
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
@@ -17,7 +17,8 @@ async function bootstrap() {
   const configSwagger = new DocumentBuilder()
     .setTitle('Api training')
     .setDescription('The training API description')
-    .setVersion('1.0')
+    .setVersion(version)
+    .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(app, configSwagger);
   SwaggerModule.setup('docs', app, document);

@@ -9,7 +9,7 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Roles } from 'src/auth/decorators/roles.decorator';
 
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
@@ -32,13 +32,14 @@ import {
 import { UsersService } from 'src/users/services/users.service';
 
 @UseGuards(JwtAuthGuard, RolesGuard)
+@ApiBearerAuth()
 @ApiTags('Users')
 @Controller()
 export class UsersController {
   constructor(private userService: UsersService) {}
 
   @Post(POST_USER)
-  @Roles()
+  @Roles(Role.SuperAdmin, Role.Admin)
   @ApiOperation({
     summary: 'create user',
   })
