@@ -15,7 +15,16 @@ export enum EnglishLevel {
   C2 = 'C2',
 }
 
-@Schema()
+@Schema({
+  toJSON: {
+    transform: (_document, returnObject) => {
+      returnObject.id = returnObject._id;
+      delete returnObject.__v;
+      delete returnObject._id;
+      delete returnObject.password;
+    },
+  },
+})
 export class User extends Document {
   @Prop({ required: true })
   name: string;

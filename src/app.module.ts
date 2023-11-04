@@ -9,6 +9,7 @@ import config from './config';
 import { DatabaseModule } from './database/database.module';
 import { environment } from './enviroments';
 import { UsersModule } from './users/users.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -22,12 +23,14 @@ import { UsersModule } from './users/users.module';
         MONGO_PORT: Joi.number().default(27017),
         MONGO_HOST: Joi.string().default('localhost'),
         MONGO_CONNECTION: Joi.string().default('mongodb'),
+        JWT_SECRET_KEY: Joi.string().required(),
       }),
       isGlobal: true,
     }),
     UsersModule,
     AccountsModule,
     DatabaseModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],

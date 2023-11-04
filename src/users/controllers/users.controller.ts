@@ -20,6 +20,7 @@ import {
 } from 'src/users/constants/routes.constant';
 import {
   CreateUserDto,
+  CreateUserResponseDto,
   QueryGetUsersDto,
   UpdateUserDto,
 } from 'src/users/dto/users.dto';
@@ -34,7 +35,7 @@ export class UsersController {
   @ApiOperation({
     summary: 'create user',
   })
-  postUser(@Body() user: CreateUserDto) {
+  postUser(@Body() user: CreateUserDto): Promise<CreateUserResponseDto> {
     return this.userService.createUser(user);
   }
 

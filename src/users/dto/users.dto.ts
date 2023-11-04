@@ -1,8 +1,8 @@
 import { ApiProperty, OmitType, PartialType } from '@nestjs/swagger';
-
 import {
   IsEmail,
   IsEnum,
+  IsMongoId,
   IsNotEmpty,
   IsOptional,
   IsPositive,
@@ -10,6 +10,7 @@ import {
   IsUrl,
   Min,
 } from 'class-validator';
+
 import { EnglishLevel, UserRole } from 'src/users/entities/user.entity';
 
 export class QueryGetUsersDto {
@@ -67,4 +68,13 @@ export class UpdateUserDto extends PartialType(
   @IsOptional()
   @ApiProperty({ example: 'www.google.com' })
   readonly urlCv?: string;
+}
+
+export class CreateUserResponseDto extends OmitType(CreateUserDto, [
+  'password',
+]) {
+  @IsMongoId()
+  @IsNotEmpty()
+  @ApiProperty({ example: 'dasfasfas123123123f' })
+  readonly id: string;
 }
