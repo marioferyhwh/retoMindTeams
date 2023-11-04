@@ -6,6 +6,7 @@ import { AccountModule } from './account/account.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import config from './config';
+import { DatabaseModule } from './database/database.module';
 import { environment } from './enviroments';
 import { UsersModule } from './users/users.module';
 
@@ -26,6 +27,7 @@ import { UsersModule } from './users/users.module';
     }),
     UsersModule,
     AccountModule,
+    DatabaseModule,
   ],
   controllers: [AppController],
   providers: [AppService],
