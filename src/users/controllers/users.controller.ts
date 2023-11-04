@@ -20,7 +20,7 @@ import {
 } from 'src/users/constants/routes.constant';
 import {
   CreateUserDto,
-  QueryGetUserDto,
+  QueryGetUsersDto,
   UpdateUserDto,
 } from 'src/users/dto/users.dto';
 import { UsersService } from 'src/users/services/users.service';
@@ -40,7 +40,7 @@ export class UsersController {
 
   @Get(GET_USER)
   @ApiOperation({ summary: 'list Users' })
-  getUsers(@Query() params: QueryGetUserDto) {
+  getUsers(@Query() params: QueryGetUsersDto) {
     return this.userService.getAllUsersByQuery(params);
   }
 

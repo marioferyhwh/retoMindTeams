@@ -4,7 +4,7 @@ import { Model } from 'mongoose';
 
 import {
   CreateUserDto,
-  QueryGetUserDto,
+  QueryGetUsersDto,
   UpdateUserDto,
 } from 'src/users/dto/users.dto';
 import { User } from 'src/users/entities/user.entity';
@@ -13,10 +13,16 @@ import { User } from 'src/users/entities/user.entity';
 export class UsersService {
   constructor(@InjectModel(User.name) private userModel: Model<User>) {}
 
-  async getAllUsersByQuery(params: QueryGetUserDto): Promise<User[]> {
-    console.log(params);
-    const users = await this.userModel.find().exec();
-    return users;
+  async getAllUsersByQuery(params?: QueryGetUsersDto): Promise<User[]> {
+    let userModelFind = this.userModel.find();
+    const { limit, offset } = params;
+    if (limit) {
+      userModelFind = userModelFind.limit(limit);
+    }
+    if (offset) {
+      userModelFind = userModelFind.skip(offset);
+    }
+    return await userModelFind.exec();
   }
 
   async getUserById(id: string) {

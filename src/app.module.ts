@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import * as Joi from 'joi';
 
-import { AccountModule } from './account/account.module';
+import { AccountsModule } from './accounts/accounts.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import config from './config';
@@ -26,7 +26,7 @@ import { UsersModule } from './users/users.module';
       isGlobal: true,
     }),
     UsersModule,
-    AccountModule,
+    AccountsModule,
     DatabaseModule,
   ],
   controllers: [AppController],

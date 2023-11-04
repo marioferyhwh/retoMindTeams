@@ -1,22 +1,30 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, OmitType, PartialType } from '@nestjs/swagger';
 
 import {
   IsEmail,
+  IsEnum,
   IsNotEmpty,
   IsOptional,
+  IsPositive,
   IsString,
   IsUrl,
+  Min,
 } from 'class-validator';
 import { EnglishLevel, UserRole } from 'src/users/entities/user.entity';
 
-export class QueryGetUserDto {}
+export class QueryGetUsersDto {
+  @IsOptional()
+  @IsPositive()
+  @ApiProperty({ example: '10' })
+  limit?: number;
+
+  @IsOptional()
+  @Min(0)
+  @ApiProperty({ example: '0' })
+  offset?: number;
+}
 
 export class CreateUserDto {
-  @IsString()
-  @IsNotEmpty()
-  @ApiProperty({ example: 'name' })
-  readonly name: string;
-
   @IsEmail()
   @IsNotEmpty()
   @ApiProperty({ example: 'name@email.com' })
@@ -27,35 +35,24 @@ export class CreateUserDto {
   @ApiProperty({ example: '123aweAWE' })
   readonly password: string;
 
+  @IsString()
+  @IsNotEmpty()
+  @ApiProperty({ example: 'name' })
+  readonly name: string;
+
   @ApiProperty({
     enum: [UserRole.Admin, UserRole.User],
     example: UserRole.User,
   })
+  @IsEnum(UserRole)
   role: UserRole;
 }
 
-export class UpdateUserDto {
-  @IsString()
-  @IsNotEmpty()
+export class UpdateUserDto extends PartialType(
+  OmitType(CreateUserDto, ['email']),
+) {
   @IsOptional()
-  @ApiProperty({ example: 'name' })
-  readonly name?: string;
-
-  @IsString()
-  @IsNotEmpty()
-  @IsOptional()
-  @ApiProperty({ example: '123aweAWE' })
-  readonly password?: string;
-
-  @ApiProperty({
-    enum: [UserRole.Admin, UserRole.User],
-    example: UserRole.User,
-  })
-  role: UserRole;
-
-  @IsString()
-  @IsNotEmpty()
-  @IsOptional()
+  @IsEnum(EnglishLevel)
   @ApiProperty({ enum: EnglishLevel, example: EnglishLevel.A2 })
   readonly englishLevel?: EnglishLevel;
 
