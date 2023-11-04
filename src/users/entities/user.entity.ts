@@ -1,11 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
+import { Role } from 'src/auth/models/roles.model';
 
-export enum UserRole {
-  SuperAdmin = 'Super Admin',
-  Admin = 'Admin',
-  User = 'User',
-}
 export enum EnglishLevel {
   A1 = 'A1',
   A2 = 'A2',
@@ -35,8 +31,8 @@ export class User extends Document {
   @Prop({ required: true })
   password: string;
 
-  @Prop({ enum: UserRole })
-  role: UserRole;
+  @Prop({ enum: Role })
+  role: Role;
 
   @Prop({ required: false })
   englishLevel?: EnglishLevel;

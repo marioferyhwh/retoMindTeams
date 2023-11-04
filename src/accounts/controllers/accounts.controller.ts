@@ -23,6 +23,8 @@ import {
   UpdateAccountDto,
 } from 'src/accounts/dto/accounts.dto';
 import { AccountsService } from 'src/accounts/services/accounts.service';
+import { Roles } from 'src/auth/decorators/roles.decorator';
+import { Role } from 'src/auth/models/roles.model';
 import { MongoIdPipe } from 'src/common/mongo-id/mongo-id.pipe';
 
 @ApiTags('Accounts')
@@ -31,6 +33,7 @@ export class AccountsController {
   constructor(private accountService: AccountsService) {}
 
   @Post(POST_ACCOUNT)
+  @Roles(Role.SuperAdmin, Role.Admin)
   @ApiOperation({
     summary: 'create account',
   })
@@ -39,18 +42,21 @@ export class AccountsController {
   }
 
   @Get(GET_ACCOUNT)
+  @Roles(Role.SuperAdmin, Role.Admin)
   @ApiOperation({ summary: 'list Accounts' })
   getAccounts(@Query() params: QueryGetAccountsDto) {
     return this.accountService.getAllAccountsByQuery(params);
   }
 
   @Get(GET_ACCOUNT_BY_ID)
+  @Roles(Role.SuperAdmin, Role.Admin)
   @ApiOperation({ summary: 'get account by id' })
   getAccount(@Param('accountId', MongoIdPipe) accountId: string) {
     return this.accountService.getAccountById(accountId);
   }
 
   @Put(PUT_ACCOUNT_BY_ID)
+  @Roles(Role.SuperAdmin, Role.Admin)
   @ApiOperation({ summary: 'update account by id' })
   putAccount(
     @Param('accountId', MongoIdPipe) accountId: string,
@@ -60,6 +66,7 @@ export class AccountsController {
   }
 
   @Delete(DELETE_ACCOUNT_BY_ID)
+  @Roles(Role.SuperAdmin, Role.Admin)
   @ApiOperation({ summary: 'remove account by id' })
   deleteAccount(@Param('accountId', MongoIdPipe) accountId: string) {
     return this.accountService.deleteAccountById(accountId);

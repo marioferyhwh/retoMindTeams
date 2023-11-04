@@ -11,7 +11,8 @@ import {
   Min,
 } from 'class-validator';
 
-import { EnglishLevel, UserRole } from 'src/users/entities/user.entity';
+import { Role } from 'src/auth/models/roles.model';
+import { EnglishLevel } from 'src/users/entities/user.entity';
 
 export class QueryGetUsersDto {
   @IsOptional()
@@ -42,11 +43,11 @@ export class CreateUserDto {
   readonly name: string;
 
   @ApiProperty({
-    enum: [UserRole.Admin, UserRole.User],
-    example: UserRole.User,
+    enum: [Role.Admin, Role.User],
+    example: Role.User,
   })
-  @IsEnum(UserRole)
-  role: UserRole;
+  @IsEnum(Role)
+  role: Role;
 }
 
 export class UpdateUserDto extends PartialType(

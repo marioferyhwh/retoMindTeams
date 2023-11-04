@@ -7,9 +7,14 @@ import {
   Post,
   Put,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { Roles } from 'src/auth/decorators/roles.decorator';
 
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { RolesGuard } from 'src/auth/guards/roles/roles.guard';
+import { Role } from 'src/auth/models/roles.model';
 import { MongoIdPipe } from 'src/common/mongo-id/mongo-id.pipe';
 import {
   DELETE_USER_BY_ID,
@@ -26,12 +31,14 @@ import {
 } from 'src/users/dto/users.dto';
 import { UsersService } from 'src/users/services/users.service';
 
+@UseGuards(JwtAuthGuard, RolesGuard)
 @ApiTags('Users')
 @Controller()
 export class UsersController {
   constructor(private userService: UsersService) {}
 
   @Post(POST_USER)
+  @Roles()
   @ApiOperation({
     summary: 'create user',
   })
@@ -40,18 +47,21 @@ export class UsersController {
   }
 
   @Get(GET_USER)
+  @Roles(Role.SuperAdmin, Role.Admin)
   @ApiOperation({ summary: 'list Users' })
   getUsers(@Query() params: QueryGetUsersDto) {
     return this.userService.getAllUsersByQuery(params);
   }
 
   @Get(GET_USER_BY_ID)
+  @Roles(Role.SuperAdmin, Role.Admin, Role.User)
   @ApiOperation({ summary: 'get user by id' })
   getUser(@Param('userId', MongoIdPipe) userId: string) {
     return this.userService.getUserById(userId);
   }
 
   @Put(PUT_USER_BY_ID)
+  @Roles(Role.SuperAdmin, Role.Admin, Role.User)
   @ApiOperation({ summary: 'update user by id' })
   putUser(
     @Param('userId', MongoIdPipe) userId: string,
@@ -61,6 +71,7 @@ export class UsersController {
   }
 
   @Delete(DELETE_USER_BY_ID)
+  @Roles(Role.SuperAdmin, Role.Admin)
   @ApiOperation({ summary: 'remove user by id' })
   deleteUser(@Param('userId', MongoIdPipe) userId: string) {
     return this.userService.deleteUserById(userId);
