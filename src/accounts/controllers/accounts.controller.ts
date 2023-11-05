@@ -26,7 +26,7 @@ import {
 import { AccountsService } from 'src/accounts/services/accounts.service';
 import { Roles } from 'src/auth/decorators/roles.decorator';
 import { Role } from 'src/auth/models/roles.model';
-import { MongoIdPipe } from 'src/common/mongo-id/mongo-id.pipe';
+import { MongoIdPipe } from 'src/common/pipes/mongo-id/mongo-id.pipe';
 import { Account } from '../entities/account.entity';
 
 @ApiTags('Accounts')

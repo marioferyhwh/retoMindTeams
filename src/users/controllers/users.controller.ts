@@ -23,7 +23,7 @@ import { Roles } from 'src/auth/decorators/roles.decorator';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { RolesGuard } from 'src/auth/guards/roles/roles.guard';
 import { Role } from 'src/auth/models/roles.model';
-import { MongoIdPipe } from 'src/common/mongo-id/mongo-id.pipe';
+import { MongoIdPipe } from 'src/common/pipes/mongo-id/mongo-id.pipe';
 import {
   DELETE_USER_BY_ID,
   GET_USER,
@@ -34,8 +34,11 @@ import {
 import {
   CreateUserDto,
   CreateUserResponseDto,
+  DeleteUserResponseDto,
+  GetUserResponseDto,
   QueryGetUsersDto,
   UpdateUserDto,
+  UpdateUserResponseDto,
 } from 'src/users/dto/users.dto';
 import { UsersService } from 'src/users/services/users.service';
 
@@ -68,7 +71,7 @@ export class UsersController {
     summary: 'list Users',
     description: `require (${Role.SuperAdmin}) o (${Role.Admin}).`,
   })
-  getUsers(@Query() params: QueryGetUsersDto) {
+  getUsers(@Query() params: QueryGetUsersDto): Promise<GetUserResponseDto[]> {
     return this.userService.getAllUsersByQuery(params);
   }
 
@@ -78,7 +81,9 @@ export class UsersController {
     summary: 'get user by id',
   })
   @ApiParam({ name: 'userId', type: 'string', description: 'ID of User' })
-  getUser(@Param('userId', MongoIdPipe) userId: string) {
+  getUser(
+    @Param('userId', MongoIdPipe) userId: string,
+  ): Promise<GetUserResponseDto> {
     return this.userService.getUserById(userId);
   }
 
@@ -91,7 +96,7 @@ export class UsersController {
   putUser(
     @Param('userId', MongoIdPipe) userId: string,
     @Body() user: UpdateUserDto,
-  ) {
+  ): Promise<UpdateUserResponseDto> {
     return this.userService.updateUserById(userId, user);
   }
 
@@ -102,7 +107,9 @@ export class UsersController {
     description: `require (${Role.SuperAdmin}) o (${Role.Admin}).`,
   })
   @ApiParam({ name: 'userId', type: 'string', description: 'ID of User' })
-  deleteUser(@Param('userId', MongoIdPipe) userId: string) {
+  deleteUser(
+    @Param('userId', MongoIdPipe) userId: string,
+  ): Promise<DeleteUserResponseDto> {
     return this.userService.deleteUserById(userId);
   }
 }

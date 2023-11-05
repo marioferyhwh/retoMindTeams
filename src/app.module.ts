@@ -5,11 +5,11 @@ import * as Joi from 'joi';
 import { AccountsModule } from './accounts/accounts.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { AuthModule } from './auth/auth.module';
 import config from './config';
 import { DatabaseModule } from './database/database.module';
 import { environment } from './enviroments';
 import { UsersModule } from './users/users.module';
-import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -27,10 +27,10 @@ import { AuthModule } from './auth/auth.module';
       }),
       isGlobal: true,
     }),
+    AuthModule,
     UsersModule,
     AccountsModule,
     DatabaseModule,
-    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -1,11 +1,11 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 
+import { LoginDto, LoginResponseDto } from 'src/auth/dto/auths.dto';
+import { PayloadToken } from 'src/auth/models/token.model';
 import { comparePassword } from 'src/common/utils/auth';
-import { User } from 'src/users/entities/user.entity';
+import { GetUserResponseDto } from 'src/users/dto/users.dto';
 import { UsersService } from 'src/users/services/users.service';
-import { LoginDto } from '../dto/auths.dto';
-import { PayloadToken } from '../models/token.model';
 
 @Injectable()
 export class AuthService {
@@ -15,7 +15,10 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async getUserByEmailAndPassword(email: string, password: string) {
+  async getUserByEmailAndPassword(
+    email: string,
+    password: string,
+  ): Promise<GetUserResponseDto> {
     const userFind = await this.usersService.getUserByEmail(email);
 
     if (userFind) {
@@ -30,7 +33,7 @@ export class AuthService {
     return null;
   }
 
-  async generateJWT(user: User) {
+  async generateJWT(user: GetUserResponseDto): Promise<LoginResponseDto> {
     const payload: PayloadToken = { role: user.role, userId: user.id };
     return {
       access_token: this.jwtService.sign(payload),
@@ -38,7 +41,7 @@ export class AuthService {
     };
   }
 
-  async loginUser(loginDto: LoginDto) {
+  async loginUser(loginDto: LoginDto): Promise<LoginResponseDto> {
     const user = await this.getUserByEmailAndPassword(
       loginDto.email,
       loginDto.password,

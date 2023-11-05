@@ -12,6 +12,8 @@ import {
 } from 'class-validator';
 
 import { Role } from 'src/auth/models/roles.model';
+import { Trim } from 'src/common/decorators/trim.decorator';
+import { IsValidPassword } from 'src/common/decorators/valid-password.decorator';
 import { EnglishLevel } from 'src/users/entities/user.entity';
 
 export class QueryGetUsersDto {
@@ -27,16 +29,20 @@ export class QueryGetUsersDto {
 }
 
 export class CreateUserDto {
+  @Trim()
   @IsEmail()
   @IsNotEmpty()
   @ApiProperty({ example: 'name@email.com' })
   readonly email: string;
 
+  @Trim()
+  @IsValidPassword()
   @IsString()
   @IsNotEmpty()
   @ApiProperty({ example: '123aweAWE' })
   readonly password: string;
 
+  @Trim()
   @IsString()
   @IsNotEmpty()
   @ApiProperty({ example: 'name' })
@@ -58,12 +64,14 @@ export class UpdateUserDto extends PartialType(
   @ApiProperty({ enum: EnglishLevel, example: EnglishLevel.A2 })
   readonly englishLevel?: EnglishLevel;
 
+  @Trim()
   @IsString()
   @IsNotEmpty()
   @IsOptional()
   @ApiProperty({ example: 'node, react' })
   readonly technicalKnowledge?: string;
 
+  @Trim()
   @IsUrl()
   @IsNotEmpty()
   @IsOptional()
@@ -77,5 +85,36 @@ export class CreateUserResponseDto extends OmitType(CreateUserDto, [
   @IsMongoId()
   @IsNotEmpty()
   @ApiProperty({ example: 'dasfasfas123123123f' })
-  readonly id: string;
+  id: string;
+
+  @ApiProperty({
+    enum: Role,
+    example: Role.User,
+  })
+  @IsEnum(Role)
+  role: Role;
 }
+
+export class GetUserResponseDto extends CreateUserResponseDto {
+  @IsOptional()
+  @IsEnum(EnglishLevel)
+  @ApiProperty({ enum: EnglishLevel, example: EnglishLevel.A2 })
+  englishLevel?: EnglishLevel;
+
+  @Trim()
+  @IsString()
+  @IsNotEmpty()
+  @IsOptional()
+  @ApiProperty({ example: 'node, react' })
+  technicalKnowledge?: string;
+
+  @Trim()
+  @IsUrl()
+  @IsNotEmpty()
+  @IsOptional()
+  @ApiProperty({ example: 'www.google.com' })
+  urlCv?: string;
+}
+
+export class UpdateUserResponseDto extends GetUserResponseDto {}
+export class DeleteUserResponseDto extends GetUserResponseDto {}

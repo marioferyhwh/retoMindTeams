@@ -6,8 +6,11 @@ import { encryptPassword } from 'src/common/utils/auth';
 import {
   CreateUserDto,
   CreateUserResponseDto,
+  DeleteUserResponseDto,
+  GetUserResponseDto,
   QueryGetUsersDto,
   UpdateUserDto,
+  UpdateUserResponseDto,
 } from 'src/users/dto/users.dto';
 import { User } from 'src/users/entities/user.entity';
 
@@ -15,7 +18,9 @@ import { User } from 'src/users/entities/user.entity';
 export class UsersService {
   constructor(@InjectModel(User.name) private userModel: Model<User>) {}
 
-  async getAllUsersByQuery(params?: QueryGetUsersDto): Promise<User[]> {
+  async getAllUsersByQuery(
+    params?: QueryGetUsersDto,
+  ): Promise<GetUserResponseDto[]> {
     let userModelFind = this.userModel.find().select('-password');
     const { limit, offset } = params;
     if (limit) {
@@ -24,15 +29,16 @@ export class UsersService {
     if (offset) {
       userModelFind = userModelFind.skip(offset);
     }
-    return await userModelFind.exec();
+    const users = await userModelFind.exec();
+    return users.map((user) => user.toJSON());
   }
 
-  async getUserById(id: string) {
+  async getUserById(id: string): Promise<GetUserResponseDto> {
     const user = await this.userModel.findById(id).select('-password').exec();
     if (!user) {
       throw new NotFoundException('User not found');
     }
-    return user;
+    return user.toJSON();
   }
 
   async createUser(user: CreateUserDto): Promise<CreateUserResponseDto> {
@@ -43,7 +49,10 @@ export class UsersService {
     return saveUser.toJSON();
   }
 
-  async updateUserById(id: string, user: UpdateUserDto): Promise<User> {
+  async updateUserById(
+    id: string,
+    user: UpdateUserDto,
+  ): Promise<UpdateUserResponseDto> {
     //TODO validate info
     if (user.password) {
       user = { ...user, password: await encryptPassword(user.password) };
@@ -58,16 +67,16 @@ export class UsersService {
     return saveUser.toJSON();
   }
 
-  async deleteUserById(id: string): Promise<User> {
+  async deleteUserById(id: string): Promise<DeleteUserResponseDto> {
     //TODO validate if can delete
     const userOld = await this.userModel.findByIdAndRemove(id).exec();
     if (!userOld) {
       throw new NotFoundException('User not found');
     }
-    return userOld;
+    return userOld.toJSON();
   }
 
-  async getUserByEmail(email: string) {
+  async getUserByEmail(email: string): Promise<User> {
     const user = await this.userModel.findOne({ email: email }).exec();
     return user;
   }
