@@ -1,6 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
-import { Role } from 'src/auth/models/roles.model';
+
+import { Role } from '../../auth/models/roles.model';
 
 export enum EnglishLevel {
   A1 = 'A1',

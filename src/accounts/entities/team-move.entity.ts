@@ -1,6 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
 import { Team } from './team.entity';
+import { User } from 'src/users/entities/user.entity';
 
 @Schema({
   toJSON: {
@@ -11,15 +12,19 @@ import { Team } from './team.entity';
     },
   },
 })
-export class Account extends Document {
-  @Prop({ required: true, unique: true })
-  nameAccount: string;
+export class TeamMove extends Document {
   @Prop({ required: true })
-  nameClient: string;
+  startDate: Date;
   @Prop({ required: true })
-  nameCharge: string;
+  endDate: Date;
   @Prop({ required: true, type: Types.ObjectId, ref: Team.name })
   team: Team | Types.ObjectId;
+  @Prop({ required: true, type: Types.ObjectId, ref: User.name })
+  user: User | Types.ObjectId;
+  @Prop({ required: true })
+  nameUser: string;
+  @Prop({ default: true })
+  activated: boolean;
 }
 
-export const AccountSchema = SchemaFactory.createForClass(Account);
+export const TeamMoveSchema = SchemaFactory.createForClass(TeamMove);

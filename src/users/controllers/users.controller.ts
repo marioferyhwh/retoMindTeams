@@ -18,19 +18,21 @@ import {
   ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
-import { Roles } from 'src/auth/decorators/roles.decorator';
 
-import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
-import { RolesGuard } from 'src/auth/guards/roles/roles.guard';
-import { Role } from 'src/auth/models/roles.model';
-import { MongoIdPipe } from 'src/common/pipes/mongo-id/mongo-id.pipe';
+import { JwtUser } from '../../auth/decorators/jwt-payload.decorator';
+import { Roles } from '../../auth/decorators/roles.decorator';
+import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
+import { RolesGuard } from '../../auth/guards/roles/roles.guard';
+import { Role } from '../../auth/models/roles.model';
+import { PayloadToken } from '../../auth/models/token.model';
+import { MongoIdPipe } from '../../common/pipes/mongo-id/mongo-id.pipe';
 import {
   DELETE_USER_BY_ID,
   GET_USER,
   GET_USER_BY_ID,
   POST_USER,
   PUT_USER_BY_ID,
-} from 'src/users/constants/routes.constant';
+} from '../constants/routes.constant';
 import {
   CreateUserDto,
   CreateUserResponseDto,
@@ -39,12 +41,12 @@ import {
   QueryGetUsersDto,
   UpdateUserDto,
   UpdateUserResponseDto,
-} from 'src/users/dto/users.dto';
-import { UsersService } from 'src/users/services/users.service';
+} from '../dto/users.dto';
+import { UsersService } from '../services/users.service';
 
-@UseGuards(JwtAuthGuard, RolesGuard)
-@ApiBearerAuth()
 @ApiTags('Users')
+@ApiBearerAuth()
+@UseGuards(JwtAuthGuard, RolesGuard)
 @Controller()
 export class UsersController {
   constructor(private userService: UsersService) {}
@@ -61,16 +63,20 @@ export class UsersController {
   @ApiUnauthorizedResponse({ description: 'Unauthorized' })
   @Roles(Role.SuperAdmin, Role.Admin)
   @Post(POST_USER)
-  postUser(@Body() user: CreateUserDto): Promise<CreateUserResponseDto> {
-    return this.userService.createUser(user);
+  postUser(
+    @Body() user: CreateUserDto,
+    @JwtUser() jwtUser: PayloadToken,
+  ): Promise<CreateUserResponseDto> {
+    return this.userService.createUser(jwtUser, user);
   }
 
-  @Roles(Role.SuperAdmin, Role.Admin)
-  @Get(GET_USER)
   @ApiOperation({
     summary: 'list Users',
     description: `require (${Role.SuperAdmin}) o (${Role.Admin}).`,
   })
+  @ApiUnauthorizedResponse({ description: 'Unauthorized' })
+  @Roles(Role.SuperAdmin, Role.Admin)
+  @Get(GET_USER)
   getUsers(@Query() params: QueryGetUsersDto): Promise<GetUserResponseDto[]> {
     return this.userService.getAllUsersByQuery(params);
   }
@@ -79,25 +85,30 @@ export class UsersController {
     summary: 'get user by id',
   })
   @ApiParam({ name: 'userId', type: 'string', description: 'ID of User' })
+  @ApiUnauthorizedResponse({ description: 'Unauthorized' })
   @Roles(Role.SuperAdmin, Role.Admin, Role.User)
   @Get(GET_USER_BY_ID)
   getUser(
     @Param('userId', MongoIdPipe) userId: string,
+    @JwtUser() jwtUser: PayloadToken,
   ): Promise<GetUserResponseDto> {
-    return this.userService.getUserById(userId);
+    return this.userService.getUserById(jwtUser, userId);
   }
 
   @ApiOperation({
     summary: 'update user by id',
   })
+  @ApiBody({ type: UpdateUserDto })
   @ApiParam({ name: 'userId', type: 'string', description: 'ID of User' })
+  @ApiUnauthorizedResponse({ description: 'Unauthorized' })
   @Roles(Role.SuperAdmin, Role.Admin, Role.User)
   @Put(PUT_USER_BY_ID)
   putUser(
     @Param('userId', MongoIdPipe) userId: string,
+    @JwtUser() jwtUser: PayloadToken,
     @Body() user: UpdateUserDto,
   ): Promise<UpdateUserResponseDto> {
-    return this.userService.updateUserById(userId, user);
+    return this.userService.updateUserById(jwtUser, userId, user);
   }
 
   @ApiOperation({
@@ -105,11 +116,13 @@ export class UsersController {
     description: `require (${Role.SuperAdmin}) o (${Role.Admin}).`,
   })
   @ApiParam({ name: 'userId', type: 'string', description: 'ID of User' })
+  @ApiUnauthorizedResponse({ description: 'Unauthorized' })
   @Roles(Role.SuperAdmin, Role.Admin)
   @Delete(DELETE_USER_BY_ID)
   deleteUser(
     @Param('userId', MongoIdPipe) userId: string,
+    @JwtUser() jwtUser: PayloadToken,
   ): Promise<DeleteUserResponseDto> {
-    return this.userService.deleteUserById(userId);
+    return this.userService.deleteUserById(jwtUser, userId);
   }
 }

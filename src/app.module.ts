@@ -10,6 +10,7 @@ import config from './config';
 import { DatabaseModule } from './database/database.module';
 import { environment } from './enviroments';
 import { UsersModule } from './users/users.module';
+import { ErrorModule } from './log-services/error.module';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { UsersModule } from './users/users.module';
     UsersModule,
     AccountsModule,
     DatabaseModule,
+    ErrorModule,
   ],
   controllers: [AppController],
   providers: [AppService],

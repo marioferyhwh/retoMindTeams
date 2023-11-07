@@ -79,3 +79,13 @@ run mongoDB local
 ```bash
  docker-compose up -d mongodb
 ```
+
+## FILE .ENV
+```
+  JWT_SECRET_KEY=
+  JWT_TOKEN_DURATION=1h
+
+  MONGO_ROOT_USERNAME=
+  MONGO_ROOT_PASSWORD=
+  MONGO_DATABASE_NAME=
+```

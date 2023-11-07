@@ -11,10 +11,10 @@ import {
   Min,
 } from 'class-validator';
 
-import { Role } from 'src/auth/models/roles.model';
-import { Trim } from 'src/common/decorators/trim.decorator';
-import { IsValidPassword } from 'src/common/decorators/valid-password.decorator';
-import { EnglishLevel } from 'src/users/entities/user.entity';
+import { Role } from '../../auth/models/roles.model';
+import { Trim } from '../../common/decorators/trim.decorator';
+import { IsValidPassword } from '../../common/decorators/valid-password.decorator';
+import { EnglishLevel } from '../entities/user.entity';
 
 export class QueryGetUsersDto {
   @IsOptional()
