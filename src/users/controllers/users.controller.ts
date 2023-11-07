@@ -49,8 +49,6 @@ import { UsersService } from 'src/users/services/users.service';
 export class UsersController {
   constructor(private userService: UsersService) {}
 
-  @Post(POST_USER)
-  @Roles(Role.SuperAdmin, Role.Admin)
   @ApiOperation({
     summary: 'create user',
     description: `require (${Role.SuperAdmin}) o (${Role.Admin}).`,
@@ -61,12 +59,14 @@ export class UsersController {
     type: CreateUserResponseDto,
   })
   @ApiUnauthorizedResponse({ description: 'Unauthorized' })
+  @Roles(Role.SuperAdmin, Role.Admin)
+  @Post(POST_USER)
   postUser(@Body() user: CreateUserDto): Promise<CreateUserResponseDto> {
     return this.userService.createUser(user);
   }
 
-  @Get(GET_USER)
   @Roles(Role.SuperAdmin, Role.Admin)
+  @Get(GET_USER)
   @ApiOperation({
     summary: 'list Users',
     description: `require (${Role.SuperAdmin}) o (${Role.Admin}).`,
@@ -75,24 +75,24 @@ export class UsersController {
     return this.userService.getAllUsersByQuery(params);
   }
 
-  @Get(GET_USER_BY_ID)
-  @Roles(Role.SuperAdmin, Role.Admin, Role.User)
   @ApiOperation({
     summary: 'get user by id',
   })
   @ApiParam({ name: 'userId', type: 'string', description: 'ID of User' })
+  @Roles(Role.SuperAdmin, Role.Admin, Role.User)
+  @Get(GET_USER_BY_ID)
   getUser(
     @Param('userId', MongoIdPipe) userId: string,
   ): Promise<GetUserResponseDto> {
     return this.userService.getUserById(userId);
   }
 
-  @Put(PUT_USER_BY_ID)
-  @Roles(Role.SuperAdmin, Role.Admin, Role.User)
   @ApiOperation({
     summary: 'update user by id',
   })
   @ApiParam({ name: 'userId', type: 'string', description: 'ID of User' })
+  @Roles(Role.SuperAdmin, Role.Admin, Role.User)
+  @Put(PUT_USER_BY_ID)
   putUser(
     @Param('userId', MongoIdPipe) userId: string,
     @Body() user: UpdateUserDto,
@@ -100,13 +100,13 @@ export class UsersController {
     return this.userService.updateUserById(userId, user);
   }
 
-  @Delete(DELETE_USER_BY_ID)
-  @Roles(Role.SuperAdmin, Role.Admin)
   @ApiOperation({
     summary: 'remove user by id',
     description: `require (${Role.SuperAdmin}) o (${Role.Admin}).`,
   })
   @ApiParam({ name: 'userId', type: 'string', description: 'ID of User' })
+  @Roles(Role.SuperAdmin, Role.Admin)
+  @Delete(DELETE_USER_BY_ID)
   deleteUser(
     @Param('userId', MongoIdPipe) userId: string,
   ): Promise<DeleteUserResponseDto> {

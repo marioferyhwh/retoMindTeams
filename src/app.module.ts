@@ -24,6 +24,7 @@ import { UsersModule } from './users/users.module';
         MONGO_HOST: Joi.string().default('localhost'),
         MONGO_CONNECTION: Joi.string().default('mongodb'),
         JWT_SECRET_KEY: Joi.string().required(),
+        JWT_TOKEN_DURATION: Joi.string().default('30m'),
       }),
       isGlobal: true,
     }),

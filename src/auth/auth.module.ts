@@ -13,8 +13,8 @@ import { JwtStrategy } from './strategies/jwt.strategy';
     UsersModule,
     JwtModule.registerAsync({
       useFactory: (configService: ConfigType<typeof config>) => {
-        const { SECRET } = configService.JWT;
-        return { secret: SECRET, signOptions: { expiresIn: '30m' } };
+        const { SECRET, DURATION } = configService.JWT;
+        return { secret: SECRET, signOptions: { expiresIn: DURATION } };
       },
       inject: [config.KEY],
     }),

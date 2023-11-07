@@ -12,6 +12,7 @@ export default registerAs('config', () => {
     },
     JWT: {
       SECRET: process.env.JWT_SECRET_KEY,
+      DURATION: process.env.JWT_TOKEN_DURATION,
     },
   };
 });

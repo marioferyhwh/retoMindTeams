@@ -42,10 +42,9 @@ export class UsersService {
   }
 
   async createUser(user: CreateUserDto): Promise<CreateUserResponseDto> {
-    //TODO add validation unique email
-    const newUSer = new this.userModel(user);
-    newUSer.password = await encryptPassword(newUSer.password);
-    const saveUser = await newUSer.save();
+    const newUser = new this.userModel(user);
+    newUser.password = await encryptPassword(newUser.password);
+    const saveUser = await newUser.save();
     return saveUser.toJSON();
   }
 

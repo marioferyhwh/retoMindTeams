@@ -3,6 +3,8 @@ import { ConfigType } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 
 import config from '../config';
+import { MongoExceptionFilter } from './mongo-exception.filter';
+import { APP_FILTER } from '@nestjs/core';
 
 @Global()
 @Module({
@@ -27,7 +29,13 @@ import config from '../config';
       inject: [config.KEY],
     }),
   ],
-  providers: [],
+  providers: [
+    {
+      provide: APP_FILTER,
+      useClass: MongoExceptionFilter,
+    },
+    MongoExceptionFilter,
+  ],
   exports: [MongooseModule],
 })
 export class DatabaseModule {}
