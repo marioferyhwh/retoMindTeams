@@ -41,8 +41,9 @@ export class CreateUserDto {
     enum: [Role.Admin, Role.User],
     example: Role.User,
   })
+  @IsOptional()
   @IsEnum(Role)
-  role: Role;
+  role?: Role;
 }
 
 export class UpdateUserDto extends PartialType(

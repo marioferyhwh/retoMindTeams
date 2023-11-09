@@ -1,6 +1,11 @@
-import { PayloadToken } from 'src/auth/models/token.model';
 import { Role } from '../../auth/models/roles.model';
-import { CreateUserDto, GetUserResponseDto } from '../dto/users.dto';
+import { PayloadToken } from '../../auth/models/token.model';
+import {
+  CreateUserDto,
+  GetUserResponseDto,
+  UpdateUserDto,
+} from '../dto/users.dto';
+import { EnglishLevel } from '../entities/user.entity';
 
 export const mockUsers1: GetUserResponseDto = {
   id: '001',
@@ -43,19 +48,29 @@ export const jwtUserRoleAdmin: PayloadToken = {
   userId: '123',
   role: Role.Admin,
 };
-export const createUSerDTORoleUser: CreateUserDto = {
+export const jwtUserRoleSuperAdmin: PayloadToken = {
+  userId: '123',
+  role: Role.SuperAdmin,
+};
+
+export const createUserDTORoleNone: CreateUserDto = {
+  email: 'email3@email.com',
+  name: 'user3',
+  password: '123',
+};
+export const createUserDTORoleUser: CreateUserDto = {
   email: 'email3@email.com',
   name: 'user3',
   password: '123',
   role: Role.User,
 };
-export const createUSerDTORoleAdmin: CreateUserDto = {
+export const createUserDTORoleAdmin: CreateUserDto = {
   email: 'email3@email.com',
   name: 'user3',
   password: '123',
   role: Role.Admin,
 };
-export const createUSerDTORoleSuperAdmin: CreateUserDto = {
+export const createUserDTORoleSuperAdmin: CreateUserDto = {
   email: 'email3@email.com',
   name: 'user3',
   password: '123',
@@ -63,11 +78,48 @@ export const createUSerDTORoleSuperAdmin: CreateUserDto = {
 };
 
 export const mockCreateUSerDTORoleUser = {
-  toJSON: jest.fn().mockReturnValue(createUSerDTORoleUser),
+  toJSON: jest.fn().mockReturnValue(createUserDTORoleUser),
 };
 export const mockCreateUSerDTORoleAdmin = {
-  toJSON: jest.fn().mockReturnValue(createUSerDTORoleAdmin),
+  toJSON: jest.fn().mockReturnValue(createUserDTORoleAdmin),
 };
 export const mockCreateUSerDTORoleSuperAdmin = {
-  toJSON: jest.fn().mockReturnValue(createUSerDTORoleSuperAdmin),
+  toJSON: jest.fn().mockReturnValue(createUserDTORoleSuperAdmin),
+};
+
+export const updateUserDTORoleUser: UpdateUserDto = {
+  name: 'user3',
+  password: '123',
+  englishLevel: EnglishLevel.A1,
+  technicalKnowledge: 'node',
+  role: Role.User,
+};
+export const updateUserDTORoleAdmin: UpdateUserDto = {
+  name: 'user3',
+  password: '123',
+  role: Role.Admin,
+};
+export const updateUserDTORoleSuperAdmin: UpdateUserDto = {
+  name: 'user3',
+  password: '123',
+  role: Role.SuperAdmin,
+};
+
+export const mockUpdateUserDTORoleUser = {
+  toJSON: jest.fn().mockReturnValue(updateUserDTORoleUser),
+};
+export const mockUpdateUserDTORoleAdmin = {
+  toJSON: jest.fn().mockReturnValue(updateUserDTORoleAdmin),
+};
+export const mockUpdateUserDTORoleSuperAdmin = {
+  toJSON: jest.fn().mockReturnValue(updateUserDTORoleSuperAdmin),
+};
+
+export const GetUserResponseDTO1: GetUserResponseDto = {
+  id: '12dsfa',
+  email: 'email3@email.com',
+  name: 'user3',
+  englishLevel: EnglishLevel.A1,
+  technicalKnowledge: 'node',
+  role: Role.User,
 };

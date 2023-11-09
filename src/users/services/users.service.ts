@@ -69,7 +69,9 @@ export class UsersService {
     jwtUser: PayloadToken,
     user: CreateUserDto,
   ): Promise<CreateUserResponseDto> {
-    console.log({ jwtUser, user });
+    if (!user.role) {
+      user.role = Role.User;
+    }
     if (this.isUnauthorizedToCreateUserWithRole(jwtUser.role, user.role)) {
       throw new UnauthorizedException(
         `Unauthorized: The user does not have permission to create a user with the role '${user.role}'.`,
@@ -90,7 +92,10 @@ export class UsersService {
         `Unauthorized: You do not have permission to edit a user different from '${jwtUser.userId}'.`,
       );
     }
-    if (this.isUnauthorizedToCreateUserWithRole(jwtUser.role, user.role)) {
+    if (
+      user.role &&
+      this.isUnauthorizedToCreateUserWithRole(jwtUser.role, user.role)
+    ) {
       throw new UnauthorizedException(
         `Unauthorized: The user does not have permission to update user to role '${user.role}'.`,
       );
