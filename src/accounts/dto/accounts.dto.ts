@@ -1,26 +1,10 @@
 import { ApiProperty, PartialType } from '@nestjs/swagger';
-import {
-  IsMongoId,
-  IsNotEmpty,
-  IsOptional,
-  IsPositive,
-  IsString,
-  Min,
-} from 'class-validator';
+import { IsMongoId, IsNotEmpty, IsString } from 'class-validator';
 
 import { Trim } from '../../common/decorators/trim.decorator';
+import { QueryGetPaginateDto } from '../../common/dto/general.dto';
 
-export class QueryGetAccountsDto {
-  @IsOptional()
-  @IsPositive()
-  @ApiProperty({ example: '10' })
-  limit?: number;
-
-  @IsOptional()
-  @Min(0)
-  @ApiProperty({ example: '0' })
-  offset?: number;
-}
+export class QueryGetAccountsDto extends QueryGetPaginateDto {}
 
 export class CreateAccountDto {
   @Trim()

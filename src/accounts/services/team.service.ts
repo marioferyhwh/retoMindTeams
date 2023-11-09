@@ -52,6 +52,7 @@ export class TeamService {
       return this.teamMoveService.createTeamMove({
         team: teamId,
         user: userId,
+        nameTeam: saveTeam.name,
       });
     });
     await Promise.all(createTeamMovePromises);
@@ -62,8 +63,8 @@ export class TeamService {
     id: string,
     team: UpdateTeamDto,
   ): Promise<UpdateTeamResponseDto> {
+    const teamOld = await this.getTeamById(id);
     if (team.users) {
-      const teamOld = await this.getTeamById(id);
       const usersNew = team.users;
       const usersOld = teamOld.users.map((user) => user.toString());
       const createTeamMovePromises = [];
@@ -74,7 +75,11 @@ export class TeamService {
           return;
         }
         createTeamMovePromises.push(
-          this.teamMoveService.createTeamMove({ team: id, user: userIdNew }),
+          this.teamMoveService.createTeamMove({
+            team: id,
+            user: userIdNew,
+            nameTeam: teamOld.name,
+          }),
         );
       });
 

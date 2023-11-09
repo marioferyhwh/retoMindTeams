@@ -1,26 +1,9 @@
 import { ApiProperty, PartialType } from '@nestjs/swagger';
-import {
-  IsArray,
-  IsMongoId,
-  IsNotEmpty,
-  IsOptional,
-  IsPositive,
-  IsString,
-  Min,
-} from 'class-validator';
-import { Trim } from 'src/common/decorators/trim.decorator';
+import { IsArray, IsMongoId, IsNotEmpty, IsString } from 'class-validator';
+import { Trim } from '../../common/decorators/trim.decorator';
+import { QueryGetPaginateDto } from '../../common/dto/general.dto';
 
-export class QueryGetTeamsDto {
-  @IsOptional()
-  @IsPositive()
-  @ApiProperty({ example: '10' })
-  limit?: number;
-
-  @IsOptional()
-  @Min(0)
-  @ApiProperty({ example: '0' })
-  offset?: number;
-}
+export class QueryGetTeamsDto extends QueryGetPaginateDto {}
 
 export class CreateTeamDto {
   @Trim()

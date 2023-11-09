@@ -1,25 +1,16 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { Transform } from 'class-transformer';
 import {
+  IsBoolean,
   IsDate,
   IsMongoId,
   IsNotEmpty,
   IsOptional,
-  IsPositive,
   IsString,
-  Min,
 } from 'class-validator';
+import { QueryGetPaginateDto } from '../../common/dto/general.dto';
 
-export class QueryGetTeamMovesDto {
-  @IsOptional()
-  @IsPositive()
-  @ApiProperty({ example: '10' })
-  limit?: number;
-
-  @IsOptional()
-  @Min(0)
-  @ApiProperty({ example: '0' })
-  offset?: number;
-
+export class QueryGetTeamMovesDto extends QueryGetPaginateDto {
   @IsMongoId()
   @IsOptional()
   @ApiProperty({
@@ -35,6 +26,14 @@ export class QueryGetTeamMovesDto {
     type: String,
   })
   nameUser?: string;
+
+  @IsOptional()
+  @IsString()
+  @ApiProperty({
+    example: 'team1',
+    type: String,
+  })
+  nameTeam?: string;
 
   @IsOptional()
   @IsDate()
@@ -53,6 +52,17 @@ export class QueryGetTeamMovesDto {
     type: Date,
   })
   endDate?: Date;
+
+  @IsBoolean()
+  @IsOptional()
+  @Transform(({ value }) => {
+    return [true, 'enabled', 'true', 1, '1'].indexOf(value) > -1;
+  })
+  @ApiProperty({
+    example: 'true',
+    type: Boolean,
+  })
+  activated?: string;
 }
 
 export class CreateTeamMoveDto {
@@ -60,6 +70,13 @@ export class CreateTeamMoveDto {
   @IsNotEmpty()
   @ApiProperty({ required: true, example: 'dasfasfas123123123f' })
   team: string;
+
+  @IsString()
+  @ApiProperty({
+    example: 'team1',
+    type: String,
+  })
+  nameTeam: string;
 
   @IsString()
   @IsNotEmpty()
@@ -85,14 +102,6 @@ export class UpdateTeamMoveDto {
     type: Date,
   })
   endDate?: Date;
-
-  @IsOptional()
-  @IsString()
-  @ApiProperty({
-    example: 'mateo',
-    type: String,
-  })
-  nameUser?: string;
 }
 export class CreateTeamMoveResponseDto {}
 

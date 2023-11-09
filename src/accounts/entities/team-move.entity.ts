@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
+import { User } from '../../users/entities/user.entity';
 import { Team } from './team.entity';
-import { User } from 'src/users/entities/user.entity';
 
 @Schema({
   toJSON: {
@@ -19,6 +19,8 @@ export class TeamMove extends Document {
   endDate: Date;
   @Prop({ required: true, type: Types.ObjectId, ref: Team.name })
   team: Team | Types.ObjectId;
+  @Prop({ required: true })
+  nameTeam: string;
   @Prop({ required: true, type: Types.ObjectId, ref: User.name })
   user: User | Types.ObjectId;
   @Prop({ required: true })

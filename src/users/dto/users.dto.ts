@@ -5,28 +5,17 @@ import {
   IsMongoId,
   IsNotEmpty,
   IsOptional,
-  IsPositive,
   IsString,
   IsUrl,
-  Min,
 } from 'class-validator';
 
 import { Role } from '../../auth/models/roles.model';
 import { Trim } from '../../common/decorators/trim.decorator';
 import { IsValidPassword } from '../../common/decorators/valid-password.decorator';
+import { QueryGetPaginateDto } from '../../common/dto/general.dto';
 import { EnglishLevel } from '../entities/user.entity';
 
-export class QueryGetUsersDto {
-  @IsOptional()
-  @IsPositive()
-  @ApiProperty({ example: '10' })
-  limit?: number;
-
-  @IsOptional()
-  @Min(0)
-  @ApiProperty({ example: '0' })
-  offset?: number;
-}
+export class QueryGetUsersDto extends QueryGetPaginateDto {}
 
 export class CreateUserDto {
   @Trim()

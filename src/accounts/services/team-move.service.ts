@@ -1,9 +1,9 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { FilterQuery, Model, Types } from 'mongoose';
+import { FilterQuery, Model } from 'mongoose';
 
-import { UsersService } from 'src/users/services/users.service';
 import { Role } from '../../auth/models/roles.model';
+import { UsersService } from '../../users/services/users.service';
 import {
   CreateTeamMoveDto,
   CreateTeamMoveResponseDto,
@@ -24,21 +24,36 @@ export class TeamMoveService {
   async getAllTeamMovesByQuery(
     params?: QueryGetTeamMovesDto,
   ): Promise<GetTeamMoveResponseDto[]> {
-    const { limit, offset, nameUser, team, endDate, startDate } = params;
+    const {
+      limit,
+      offset,
+      nameUser,
+      team,
+      nameTeam,
+      endDate,
+      startDate,
+      activated,
+    } = params;
 
     const filters: FilterQuery<TeamMove> = {};
 
     if (nameUser) {
       filters.nameUser = { $regex: new RegExp(nameUser, 'i') };
     }
+    if (nameTeam) {
+      filters.nameTeam = { $regex: new RegExp(nameTeam, 'i') };
+    }
     if (team) {
-      filters.team = new Types.ObjectId(team);
+      filters.team = team;
     }
     if (startDate) {
       filters.startDate = { $gt: new Date(startDate) };
     }
     if (endDate) {
       filters.endDate = { $lte: new Date(endDate) };
+    }
+    if (activated !== undefined) {
+      filters.activated = activated;
     }
 
     let teamModelModelFind = this.teamMoveModel.find(filters);
@@ -64,14 +79,10 @@ export class TeamMoveService {
       { role: Role.Admin, userId: '' },
       teamModel.user,
     );
+    teamModel.user = teamModel.user.toString();
+    teamModel.team = teamModel.team.toString();
     const newTeamMove = new this.teamMoveModel(teamModel);
     newTeamMove.nameUser = user.name;
-    if (typeof newTeamMove.user === 'string') {
-      newTeamMove.user = new Types.ObjectId(teamModel.user);
-    }
-    if (typeof newTeamMove.team === 'string') {
-      newTeamMove.team = new Types.ObjectId(teamModel.team);
-    }
     newTeamMove.endDate = endDate;
     const saveTeamMove = await newTeamMove.save();
     return saveTeamMove.toJSON();
@@ -93,13 +104,12 @@ export class TeamMoveService {
 
   async endTeamMove(teamId: string, userId: string): Promise<void> {
     const filters = {
-      team: new Types.ObjectId(teamId),
-      user: new Types.ObjectId(userId),
+      team: teamId,
+      user: userId,
       activated: true,
     };
 
     const teamMove = await this.teamMoveModel.findOne(filters).exec();
-    console.log('teamMove', teamMove);
 
     teamMove.endDate = new Date();
     teamMove.activated = false;

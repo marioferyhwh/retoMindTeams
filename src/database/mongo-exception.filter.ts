@@ -1,10 +1,10 @@
 3;
 
 import { ArgumentsHost, Catch, HttpStatus } from '@nestjs/common';
-
 import { BaseExceptionFilter } from '@nestjs/core';
 import * as mongoose from 'mongoose';
-import { ErrorLoggerService } from 'src/log-services/error-logger.service';
+
+import { ErrorLoggerService } from '../log-services/error-logger.service';
 
 @Catch(mongoose.mongo.MongoServerError)
 export class MongoExceptionFilter extends BaseExceptionFilter {
