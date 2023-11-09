@@ -43,7 +43,10 @@ export class UsersService {
     return jwtUser.role == Role.User && jwtUser.userId != id;
   }
   isUnauthorizedToCreateUserWithRole(jwtUserRole: Role, userRole: Role) {
-    return jwtUserRole != Role.SuperAdmin && userRole != Role.User;
+    return (
+      jwtUserRole == Role.User ||
+      (jwtUserRole == Role.Admin && userRole != Role.User)
+    );
   }
 
   async getUserById(
@@ -66,14 +69,14 @@ export class UsersService {
     jwtUser: PayloadToken,
     user: CreateUserDto,
   ): Promise<CreateUserResponseDto> {
+    console.log({ jwtUser, user });
     if (this.isUnauthorizedToCreateUserWithRole(jwtUser.role, user.role)) {
       throw new UnauthorizedException(
         `Unauthorized: The user does not have permission to create a user with the role '${user.role}'.`,
       );
     }
-    const newUser = new this.userModel(user);
-    newUser.password = await encryptPassword(newUser.password);
-    const saveUser = await newUser.save();
+    user = { ...user, password: await encryptPassword(user.password) };
+    const saveUser = await this.userModel.create(user);
     return saveUser.toJSON();
   }
 

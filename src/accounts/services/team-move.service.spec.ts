@@ -1,4 +1,8 @@
+import { getModelToken } from '@nestjs/mongoose';
 import { Test, TestingModule } from '@nestjs/testing';
+import { User } from '../../users/entities/user.entity';
+import { UsersService } from '../../users/services/users.service';
+import { TeamMove } from '../entities/team-move.entity';
 import { TeamMoveService } from './team-move.service';
 
 describe('TeamMoveService', () => {
@@ -6,7 +10,22 @@ describe('TeamMoveService', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [TeamMoveService],
+      providers: [
+        TeamMoveService,
+        {
+          provide: getModelToken(TeamMove.name),
+          useValue: {
+            find: jest.fn().mockReturnThis(),
+          },
+        },
+        UsersService,
+        {
+          provide: getModelToken(User.name),
+          useValue: {
+            find: jest.fn().mockReturnThis(),
+          },
+        },
+      ],
     }).compile();
 
     service = module.get<TeamMoveService>(TeamMoveService);

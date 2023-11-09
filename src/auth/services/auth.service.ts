@@ -11,7 +11,6 @@ import { PayloadToken } from '../models/token.model';
 export class AuthService {
   constructor(
     private usersService: UsersService,
-
     private jwtService: JwtService,
   ) {}
 
