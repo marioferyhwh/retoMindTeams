@@ -1,5 +1,3 @@
-3;
-
 import { ArgumentsHost, Catch, HttpStatus } from '@nestjs/common';
 import { BaseExceptionFilter } from '@nestjs/core';
 import * as mongoose from 'mongoose';

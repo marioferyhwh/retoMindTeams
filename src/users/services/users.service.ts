@@ -45,6 +45,7 @@ export class UsersService {
   isUnauthorizedToCreateUserWithRole(jwtUserRole: Role, userRole: Role) {
     return (
       jwtUserRole == Role.User ||
+      userRole == Role.SuperAdmin ||
       (jwtUserRole == Role.Admin && userRole != Role.User)
     );
   }

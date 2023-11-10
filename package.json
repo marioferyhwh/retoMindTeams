@@ -82,8 +82,8 @@
       "-mock.ts",
       ".entity.ts",
       ".module.ts",
-      ".controller.ts"
-
+      ".controller.ts",
+      ".constant.ts"
     ]
   }
 }

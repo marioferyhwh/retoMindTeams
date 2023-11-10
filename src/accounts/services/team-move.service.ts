@@ -81,10 +81,11 @@ export class TeamMoveService {
     );
     teamModel.user = teamModel.user.toString();
     teamModel.team = teamModel.team.toString();
-    const newTeamMove = new this.teamMoveModel(teamModel);
-    newTeamMove.nameUser = user.name;
-    newTeamMove.endDate = endDate;
-    const saveTeamMove = await newTeamMove.save();
+    const saveTeamMove = await this.teamMoveModel.create({
+      ...teamModel,
+      nameUser: user.name,
+      endDate: endDate,
+    });
     return saveTeamMove.toJSON();
   }
 

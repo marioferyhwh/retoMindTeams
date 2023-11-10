@@ -45,8 +45,7 @@ export class TeamService {
 
   async createTeam(team: CreateTeamDto): Promise<CreateTeamResponseDto> {
     const users = team.users;
-    const newTeam = new this.teamModel(team);
-    const saveTeam = await newTeam.save();
+    const saveTeam = await this.teamModel.create(team);
     const teamId = saveTeam._id;
     const createTeamMovePromises = users.map((userId) => {
       return this.teamMoveService.createTeamMove({

@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException, Inject } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 
@@ -49,8 +49,7 @@ export class AccountsService {
   ): Promise<CreateAccountResponseDto> {
     const team = await this.teamService.getTeamById(account.team);
     account.team = team.id;
-    const newAccount = new this.accountModel(account);
-    const saveAccount = await newAccount.save();
+    const saveAccount = await this.accountModel.create(account);
     return saveAccount.toJSON();
   }
 
