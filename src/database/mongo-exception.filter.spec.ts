@@ -29,12 +29,10 @@ describe('MongoExceptionFilter', () => {
 
   describe('catch', () => {
     const host = {
-      switchToHttp: () => ({
-        getResponse: () => ({
-          status: jest.fn(),
-          json: jest.fn(),
-        }),
-      }),
+      switchToHttp: jest.fn().mockReturnThis(),
+      getResponse: jest.fn().mockReturnThis(),
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn(),
     } as any;
 
     it('should catch and handle a MongoDB duplicate key error', () => {
@@ -43,16 +41,15 @@ describe('MongoExceptionFilter', () => {
       });
       exception.code = 11000;
       exception.keyValue = { username: 'john_doe' };
-
       const errorLoggerSpy = jest.spyOn(errorLoggerService, 'logError');
+      const statusSpy = jest.spyOn(host, 'status').mockReturnThis();
+      const jsonSpy = jest.spyOn(host, 'json');
 
       mongoExceptionFilter.catch(exception, host);
 
       expect(errorLoggerSpy).toHaveBeenCalledWith(exception);
-
-      const response = host.switchToHttp().getResponse();
-      expect(response.status).toHaveBeenCalledWith(HttpStatus.CONFLICT);
-      expect(response.json).toHaveBeenCalledWith({
+      expect(statusSpy).toHaveBeenCalledWith(HttpStatus.CONFLICT);
+      expect(jsonSpy).toHaveBeenCalledWith({
         statusCode: HttpStatus.CONFLICT,
         message: `Duplicate unique key '${Object.keys(exception.keyValue)}'`,
       });
@@ -64,16 +61,15 @@ describe('MongoExceptionFilter', () => {
       });
 
       const errorLoggerSpy = jest.spyOn(errorLoggerService, 'logError');
+      const statusSpy = jest.spyOn(host, 'status').mockReturnThis();
+      const jsonSpy = jest.spyOn(host, 'json');
 
       mongoExceptionFilter.catch(exception, host);
 
       expect(errorLoggerSpy).toHaveBeenCalledWith(exception);
 
-      const response = host.switchToHttp().getResponse();
-      expect(response.status).toHaveBeenCalledWith(
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
-      expect(response.json).toHaveBeenCalledWith({
+      expect(statusSpy).toHaveBeenCalledWith(HttpStatus.INTERNAL_SERVER_ERROR);
+      expect(jsonSpy).toHaveBeenCalledWith({
         statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
         message: 'MongoDB internal error.',
       });

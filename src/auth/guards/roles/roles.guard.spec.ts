@@ -11,6 +11,9 @@ describe('RolesGuard', () => {
     reflector = new Reflector();
     rolesGuard = new RolesGuard(reflector);
   });
+  afterEach(() => {
+    jest.clearAllMocks;
+  });
 
   it('should be defined', () => {
     expect(rolesGuard).toBeDefined();
@@ -35,16 +38,25 @@ describe('RolesGuard', () => {
     it('correct role', () => {
       const refactorGetSpy = jest.spyOn(reflector, 'get');
       refactorGetSpy.mockReturnValue([Role.Admin, Role.SuperAdmin]);
-      context.user = { role: Role.Admin };
+      context.getRequest = jest.fn().mockReturnValue({
+        user: { role: Role.Admin },
+      });
 
-      expect(rolesGuard.canActivate(context)).toBeTruthy();
+      const response = rolesGuard.canActivate(context);
+
+      expect(response).toBeTruthy();
     });
 
-    it.only('not correct role', () => {
+    it('not correct role', () => {
       const refactorGetSpy = jest.spyOn(reflector, 'get');
       refactorGetSpy.mockReturnValue([Role.Admin, Role.SuperAdmin]);
-      context.user = { role: Role.User };
-      expect(rolesGuard.canActivate(context)).toThrow(UnauthorizedException);
+      context.getRequest = jest.fn().mockReturnValue({
+        user: { role: Role.User },
+      });
+
+      expect(() => rolesGuard.canActivate(context)).toThrow(
+        UnauthorizedException,
+      );
     });
   });
 });

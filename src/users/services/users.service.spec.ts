@@ -8,17 +8,22 @@ import {
   createUserDTORoleAdmin,
   createUserDTORoleNone,
   createUserDTORoleUser,
+  createUserResponseDTORoleAdmin,
+  createUserResponseDTORoleUser,
+  deleteUserResponseDTORoleUser,
   jwtUserRoleAdmin,
   jwtUserRoleSuperAdmin,
   jwtUserRoleUser,
-  mockCreateUSerDTORoleAdmin,
-  mockCreateUSerDTORoleUser,
-  mockUpdateUserDTORoleUser,
+  mockCreateUserResponseDTORoleAdmin,
+  mockCreateUserResponseDTORoleUser,
+  mockDeleteUserResponseDTORoleUser,
+  mockUpdateUserResponseDTORoleUser,
   mockUserModel,
   mockUsers,
   mockUsersExpect,
   updateUserDTORoleAdmin,
   updateUserDTORoleUser,
+  updateUserResponseDTORoleUser,
 } from '../mocks/user-mock';
 import { UsersService } from './users.service';
 
@@ -92,36 +97,40 @@ describe('UsersService', () => {
     it('should create a user Admin and return the created user', async () => {
       userModel.create = jest
         .fn()
-        .mockResolvedValue(mockCreateUSerDTORoleAdmin);
+        .mockResolvedValue(mockCreateUserResponseDTORoleAdmin);
 
       const result = await usersService.createUser(
         jwtUserRoleSuperAdmin,
         createUserDTORoleAdmin,
       );
 
-      expect(result).toEqual(createUserDTORoleAdmin);
+      expect(result).toEqual(createUserResponseDTORoleAdmin);
     });
 
     it('should create a user without role and return the created user', async () => {
-      userModel.create = jest.fn().mockResolvedValue(mockCreateUSerDTORoleUser);
+      userModel.create = jest
+        .fn()
+        .mockResolvedValue(mockCreateUserResponseDTORoleUser);
 
       const result = await usersService.createUser(
         jwtUserRoleAdmin,
         createUserDTORoleNone,
       );
 
-      expect(result).toEqual(createUserDTORoleUser);
+      expect(result).toEqual(createUserResponseDTORoleUser);
     });
 
     it('should create a user and return the created user', async () => {
-      userModel.create = jest.fn().mockResolvedValue(mockCreateUSerDTORoleUser);
+      userModel.create = jest
+        .fn()
+        .mockResolvedValue(mockCreateUserResponseDTORoleUser);
 
       const result = await usersService.createUser(
         jwtUserRoleAdmin,
         createUserDTORoleUser,
       );
 
-      expect(result).toEqual(createUserDTORoleUser);
+      expect(result).toEqual(createUserResponseDTORoleUser);
     });
 
     it('should throw UnauthorizedException for unauthorized user role User', async () => {
@@ -145,7 +154,9 @@ describe('UsersService', () => {
 
   describe('updateUserById', () => {
     it('should update a user to role Admin and return the updated user', async () => {
-      userModel.save = jest.fn().mockResolvedValue(mockUpdateUserDTORoleUser);
+      userModel.save = jest
+        .fn()
+        .mockResolvedValue(mockUpdateUserResponseDTORoleUser);
 
       const userId = '456';
 
@@ -155,11 +166,13 @@ describe('UsersService', () => {
         updateUserDTORoleAdmin,
       );
 
-      expect(result).toEqual(updateUserDTORoleUser);
+      expect(result).toEqual(updateUserResponseDTORoleUser);
     });
 
     it('should update a user and return the updated user', async () => {
-      userModel.save = jest.fn().mockResolvedValue(mockUpdateUserDTORoleUser);
+      userModel.save = jest
+        .fn()
+        .mockResolvedValue(mockUpdateUserResponseDTORoleUser);
 
       const userId = '456';
 
@@ -169,7 +182,7 @@ describe('UsersService', () => {
         updateUserDTORoleUser,
       );
 
-      expect(result).toEqual(updateUserDTORoleUser);
+      expect(result).toEqual(updateUserResponseDTORoleUser);
     });
 
     it('should throw NotFoundException for edit user', async () => {
@@ -206,10 +219,12 @@ describe('UsersService', () => {
       await expect(result).rejects.toThrow(UnauthorizedException);
     });
   });
-
+  //TODO
   describe('deleteUserById', () => {
     it('should delete a user and return the deleted user', async () => {
-      userModel.exec = jest.fn().mockResolvedValue(mockUpdateUserDTORoleUser);
+      userModel.exec = jest
+        .fn()
+        .mockResolvedValue(mockDeleteUserResponseDTORoleUser);
 
       const userId = jwtUserRoleAdmin.userId + '1';
 
@@ -218,7 +233,7 @@ describe('UsersService', () => {
         userId,
       );
 
-      expect(result).toEqual(updateUserDTORoleUser);
+      expect(result).toEqual(deleteUserResponseDTORoleUser);
       expect(userModel.findByIdAndRemove).toHaveBeenCalledWith(userId);
     });
 
