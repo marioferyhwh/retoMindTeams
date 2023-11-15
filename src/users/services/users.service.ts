@@ -39,10 +39,13 @@ export class UsersService {
     return users.map((user) => user.toJSON());
   }
 
-  isUnauthorizedToEditOrSeeUser(jwtUser: PayloadToken, id: string) {
+  isUnauthorizedToEditOrSeeUser(jwtUser: PayloadToken, id: string): boolean {
     return jwtUser.role == Role.User && jwtUser.userId != id;
   }
-  isUnauthorizedToCreateUserWithRole(jwtUserRole: Role, userRole: Role) {
+  isUnauthorizedToCreateUserWithRole(
+    jwtUserRole: Role,
+    userRole: Role,
+  ): boolean {
     return (
       jwtUserRole == Role.User ||
       userRole == Role.SuperAdmin ||

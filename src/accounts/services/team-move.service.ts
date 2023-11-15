@@ -47,7 +47,7 @@ export class TeamMoveService {
       filters.team = team;
     }
     if (startDate) {
-      filters.startDate = { $gt: new Date(startDate) };
+      filters.startDate = { $gte: new Date(startDate) };
     }
     if (endDate) {
       filters.endDate = { $lte: new Date(endDate) };

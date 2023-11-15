@@ -32,12 +32,9 @@ export class AuthService {
     return null;
   }
 
-  async generateJWT(user: GetUserResponseDto): Promise<LoginResponseDto> {
+  async generateJWT(user: GetUserResponseDto): Promise<string> {
     const payload: PayloadToken = { role: user.role, userId: user.id };
-    return {
-      access_token: this.jwtService.sign(payload),
-      user,
-    };
+    return this.jwtService.sign(payload);
   }
 
   async loginUser(loginDto: LoginDto): Promise<LoginResponseDto> {
@@ -48,7 +45,11 @@ export class AuthService {
     if (!user) {
       throw new UnauthorizedException('not allow');
     }
+    const accessToken = await this.generateJWT(user);
 
-    return await this.generateJWT(user);
+    return {
+      access_token: accessToken,
+      user,
+    };
   }
 }

@@ -18,13 +18,7 @@ describe('TeamMoveService', () => {
             find: jest.fn().mockReturnThis(),
           },
         },
-        UsersService,
-        {
-          provide: getModelToken(User.name),
-          useValue: {
-            find: jest.fn().mockReturnThis(),
-          },
-        },
+        { provide: UsersService, useValue: {} },
       ],
     }).compile();
 
