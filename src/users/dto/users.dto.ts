@@ -117,9 +117,8 @@ export class UpdateProfileDto extends PartialType(
   @Trim()
   @IsValidPassword()
   @IsString()
-  @IsNotEmpty()
   @IsOptional()
-  @ApiProperty({ example: '123aweAWE', required: false })
-  readonly password: string;
+  @ApiProperty({ example: '123aweAWE' })
+  readonly password?: string;
 }
 export class UpdateProfileResponseDto extends GetProfileResponseDto {}

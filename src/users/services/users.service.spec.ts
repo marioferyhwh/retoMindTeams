@@ -2,6 +2,7 @@ import { NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { getModelToken } from '@nestjs/mongoose';
 import { Test, TestingModule } from '@nestjs/testing';
 
+import { UpdateProfileDto } from '../dto/users.dto';
 import { User } from '../entities/user.entity';
 import {
   GetUserResponseDTO1,
@@ -17,6 +18,9 @@ import {
   mockCreateUserResponseDTORoleAdmin,
   mockCreateUserResponseDTORoleUser,
   mockDeleteUserResponseDTORoleUser,
+  mockProfile1,
+  mockProfileUpdate1,
+  mockUpdateProfile,
   mockUpdateUserResponseDTORoleUser,
   mockUserModel,
   mockUsers,
@@ -219,7 +223,7 @@ describe('UsersService', () => {
       await expect(result).rejects.toThrow(UnauthorizedException);
     });
   });
-  //TODO
+
   describe('deleteUserById', () => {
     it('should delete a user and return the deleted user', async () => {
       userModel.exec = jest
@@ -266,6 +270,50 @@ describe('UsersService', () => {
       );
 
       expect(result).toEqual(GetUserResponseDTO1);
+    });
+  });
+
+  describe('getProfileById', () => {
+    it('should return a user profile', async () => {
+      userModel.toJSON = jest.fn().mockResolvedValue(mockProfile1);
+      const id = jwtUserRoleUser.userId;
+
+      const result = await usersService.getProfileById(id);
+
+      expect(result).toEqual(mockProfile1);
+      expect(userModel.findById).toHaveBeenCalledWith(id);
+    });
+    it('should throw NotFoundException if user is not found', async () => {
+      userModel.exec = jest.fn().mockResolvedValue(null);
+
+      await expect(
+        usersService.getProfileById(jwtUserRoleUser.userId),
+      ).rejects.toThrow(NotFoundException);
+    });
+  });
+
+  describe('updateProfileById', () => {
+    it('should update a user to role Admin and return the updated user', async () => {
+      userModel.toJSON = jest.fn().mockResolvedValue(mockProfileUpdate1);
+
+      const userId = '456';
+
+      const result = await usersService.updateProfileById(
+        userId,
+        mockUpdateProfile,
+      );
+
+      expect(result).toEqual(mockProfileUpdate1);
+    });
+
+    it('should throw NotFoundException for edit user profile', async () => {
+      userModel.exec = jest.fn().mockResolvedValue(null);
+
+      const userId = '456';
+
+      const result = usersService.updateProfileById(userId, UpdateProfileDto);
+
+      await expect(result).rejects.toThrow(NotFoundException);
     });
   });
 });

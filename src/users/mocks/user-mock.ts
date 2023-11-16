@@ -4,7 +4,10 @@ import {
   CreateUserDto,
   CreateUserResponseDto,
   DeleteUserResponseDto,
+  GetProfileResponseDto,
   GetUserResponseDto,
+  UpdateProfileDto,
+  UpdateProfileResponseDto,
   UpdateUserDto,
   UpdateUserResponseDto,
 } from '../dto/users.dto';
@@ -181,5 +184,23 @@ export const GetUserResponseDTO1: GetUserResponseDto = {
   name: 'user3',
   englishLevel: EnglishLevel.A1,
   technicalKnowledge: 'node',
+  role: Role.User,
+};
+
+export const mockProfile1: GetProfileResponseDto = {
+  id: '001',
+  email: 'email1@email.com',
+  name: 'user1',
+  role: Role.User,
+};
+
+export const mockUpdateProfile: UpdateProfileDto = {
+  password: '222222',
+};
+
+export const mockProfileUpdate1: UpdateProfileResponseDto = {
+  id: '001',
+  email: 'email1@email.com',
+  name: 'user1',
   role: Role.User,
 };
