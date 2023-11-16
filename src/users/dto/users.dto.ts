@@ -108,3 +108,18 @@ export class GetUserResponseDto extends CreateUserResponseDto {
 
 export class UpdateUserResponseDto extends GetUserResponseDto {}
 export class DeleteUserResponseDto extends GetUserResponseDto {}
+
+export class GetProfileResponseDto extends GetUserResponseDto {}
+
+export class UpdateProfileDto extends PartialType(
+  OmitType(GetProfileResponseDto, ['role', 'email', 'id']),
+) {
+  @Trim()
+  @IsValidPassword()
+  @IsString()
+  @IsNotEmpty()
+  @IsOptional()
+  @ApiProperty({ example: '123aweAWE', required: false })
+  readonly password: string;
+}
+export class UpdateProfileResponseDto extends GetProfileResponseDto {}

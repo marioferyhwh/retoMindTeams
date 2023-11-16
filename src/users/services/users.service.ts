@@ -13,8 +13,11 @@ import {
   CreateUserDto,
   CreateUserResponseDto,
   DeleteUserResponseDto,
+  GetProfileResponseDto,
   GetUserResponseDto,
   QueryGetUsersDto,
+  UpdateProfileDto,
+  UpdateProfileResponseDto,
   UpdateUserDto,
   UpdateUserResponseDto,
 } from '../dto/users.dto';
@@ -136,5 +139,30 @@ export class UsersService {
   async getUserByEmail(email: string): Promise<User> {
     const user = await this.userModel.findOne({ email: email }).exec();
     return user;
+  }
+
+  async getProfileById(id: string): Promise<GetProfileResponseDto> {
+    const user = await this.userModel.findById(id).select('-password').exec();
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+    return user.toJSON();
+  }
+
+  async updateProfileById(
+    id: string,
+    user: UpdateProfileDto,
+  ): Promise<UpdateProfileResponseDto> {
+    if (user.password) {
+      user = { ...user, password: await encryptPassword(user.password) };
+    }
+    const updateUser = await this.userModel
+      .findByIdAndUpdate(id, { $set: user }, { new: true })
+      .exec();
+    if (!updateUser) {
+      throw new NotFoundException('User not found');
+    }
+    const saveUser = await updateUser.save();
+    return saveUser.toJSON();
   }
 }

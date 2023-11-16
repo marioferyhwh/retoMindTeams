@@ -28,9 +28,11 @@ import { PayloadToken } from '../../auth/models/token.model';
 import { MongoIdPipe } from '../../common/pipes/mongo-id/mongo-id.pipe';
 import {
   DELETE_USER_BY_ID,
+  GET_PROFILE,
   GET_USER,
   GET_USER_BY_ID,
   POST_USER,
+  PUT_PROFILE,
   PUT_USER_BY_ID,
 } from '../constants/routes.constant';
 import {
@@ -39,6 +41,8 @@ import {
   DeleteUserResponseDto,
   GetUserResponseDto,
   QueryGetUsersDto,
+  UpdateProfileDto,
+  UpdateProfileResponseDto,
   UpdateUserDto,
   UpdateUserResponseDto,
 } from '../dto/users.dto';
@@ -50,6 +54,30 @@ import { UsersService } from '../services/users.service';
 @Controller()
 export class UsersController {
   constructor(private userService: UsersService) {}
+
+  @ApiOperation({
+    summary: 'get profile',
+  })
+  @ApiUnauthorizedResponse({ description: 'Unauthorized' })
+  @Get(GET_PROFILE)
+  getProfile(@JwtUser() jwtUser: PayloadToken): Promise<GetUserResponseDto> {
+    console.log({ jwtUser });
+    return this.userService.getProfileById(jwtUser.userId);
+  }
+
+  @ApiOperation({
+    summary: 'update profile',
+  })
+  @ApiBody({ type: UpdateProfileDto })
+  @ApiUnauthorizedResponse({ description: 'Unauthorized' })
+  @Put(PUT_PROFILE)
+  putProfile(
+    @JwtUser() jwtUser: PayloadToken,
+    @Body() user: UpdateProfileDto,
+  ): Promise<UpdateProfileResponseDto> {
+    console.log({ jwtUser, user });
+    return this.userService.updateProfileById(jwtUser.userId, user);
+  }
 
   @ApiOperation({
     summary: 'create user',
