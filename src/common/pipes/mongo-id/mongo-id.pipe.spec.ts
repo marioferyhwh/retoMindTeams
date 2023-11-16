@@ -1,4 +1,4 @@
-import { BadRequestException } from '@nestjs/common';
+import { NotFoundException } from '@nestjs/common';
 import { MongoIdPipe } from './mongo-id.pipe';
 
 describe('MongoIdPipe', () => {
@@ -19,16 +19,14 @@ describe('MongoIdPipe', () => {
       expect(transformedValue).toBe(validMongoId);
     });
 
-    it('should throw BadRequestException for an invalid Mongo ID', () => {
+    it('should throw NotFoundException for an invalid Mongo ID', () => {
       const invalidMongoId = 'invalid_id';
 
       const transformWithInvalidId = () =>
         mongoIdPipe.transform(invalidMongoId);
 
-      expect(transformWithInvalidId).toThrow(BadRequestException);
-      expect(transformWithInvalidId).toThrow(
-        `${invalidMongoId} is not mongoId`,
-      );
+      expect(transformWithInvalidId).toThrow(NotFoundException);
+      expect(transformWithInvalidId).toThrow(`${invalidMongoId} not found`);
     });
   });
 });

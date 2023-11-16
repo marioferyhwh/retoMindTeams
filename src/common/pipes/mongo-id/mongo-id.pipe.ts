@@ -1,11 +1,11 @@
-import { BadRequestException, Injectable, PipeTransform } from '@nestjs/common';
+import { Injectable, NotFoundException, PipeTransform } from '@nestjs/common';
 import { isMongoId } from 'class-validator';
 
 @Injectable()
 export class MongoIdPipe implements PipeTransform {
   transform(value: string /*, metadata: ArgumentMetadata*/) {
     if (!isMongoId(value)) {
-      throw new BadRequestException(`${value} is not mongoId`);
+      throw new NotFoundException(`${value} not found`);
     }
     return value;
   }

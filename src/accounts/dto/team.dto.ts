@@ -20,9 +20,9 @@ export class CreateTeamDto {
 export class UpdateTeamDto extends PartialType(CreateTeamDto) {}
 
 export class CreateTeamResponseDto extends CreateTeamDto {
-  @IsMongoId()
+  @IsMongoId({ message: 'Invalid Team ID' })
   @IsNotEmpty()
-  @ApiProperty({ example: 'dasfasfas123123123f' })
+  @ApiProperty({ example: '65468668321b83dfe5f6a9fa' })
   readonly id: string;
 }
 

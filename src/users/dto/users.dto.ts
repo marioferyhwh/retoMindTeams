@@ -72,9 +72,9 @@ export class UpdateUserDto extends PartialType(
 export class CreateUserResponseDto extends OmitType(CreateUserDto, [
   'password',
 ]) {
-  @IsMongoId()
+  @IsMongoId({ message: 'Invalid user ID' })
   @IsNotEmpty()
-  @ApiProperty({ example: 'dasfasfas123123123f' })
+  @ApiProperty({ example: '65468668321b83dfe5f6a9fa' })
   id: string;
 
   @ApiProperty({

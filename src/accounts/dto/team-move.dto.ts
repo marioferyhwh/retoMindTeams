@@ -11,10 +11,10 @@ import {
 import { QueryGetPaginateDto } from '../../common/dto/general.dto';
 
 export class QueryGetTeamMovesDto extends QueryGetPaginateDto {
-  @IsMongoId()
+  @IsMongoId({ message: 'Invalid Team ID' })
   @IsOptional()
   @ApiProperty({
-    example: 'dasfasfas123123123f',
+    example: '65468668321b83dfe5f6a9fa',
     type: String,
   })
   team?: string;
@@ -66,9 +66,9 @@ export class QueryGetTeamMovesDto extends QueryGetPaginateDto {
 }
 
 export class CreateTeamMoveDto {
-  @IsMongoId()
+  @IsMongoId({ message: 'Invalid Team ID' })
   @IsNotEmpty()
-  @ApiProperty({ required: true, example: 'dasfasfas123123123f' })
+  @ApiProperty({ required: true, example: '65468668321b83dfe5f6a9fa' })
   team: string;
 
   @IsString()
@@ -80,7 +80,11 @@ export class CreateTeamMoveDto {
 
   @IsString()
   @IsNotEmpty()
-  @ApiProperty({ required: true, example: 'dasfasfas123123123f', type: String })
+  @ApiProperty({
+    required: true,
+    example: '65468668321b83dfe5f6a9fa',
+    type: String,
+  })
   user: string;
 
   @IsOptional()
@@ -104,9 +108,9 @@ export class UpdateTeamMoveDto {
   endDate?: Date;
 }
 export class CreateTeamMoveResponseDto extends CreateTeamMoveDto {
-  @IsMongoId()
+  @IsMongoId({ message: 'Invalid Team Move ID' })
   @IsNotEmpty()
-  @ApiProperty({ example: 'dasfasfas123123123f' })
+  @ApiProperty({ example: '65468668321b83dfe5f6a9fa' })
   readonly id: string;
 
   @IsDate()

@@ -25,18 +25,18 @@ export class CreateAccountDto {
   @ApiProperty({ example: 'luis' })
   readonly nameCharge: string;
 
-  @IsMongoId()
+  @IsMongoId({ message: 'Invalid Team ID' })
   @IsNotEmpty()
-  @ApiProperty({ example: 'dasfasfas123123123f' })
+  @ApiProperty({ example: '65468668321b83dfe5f6a9fa' })
   team: string;
 }
 
 export class UpdateAccountDto extends PartialType(CreateAccountDto) {}
 
 export class CreateAccountResponseDto extends CreateAccountDto {
-  @IsMongoId()
+  @IsMongoId({ message: 'Invalid Account ID' })
   @IsNotEmpty()
-  @ApiProperty({ example: 'dasfasfas123123123f' })
+  @ApiProperty({ example: '65468668321b83dfe5f6a9fa' })
   readonly id: string;
 }
 
