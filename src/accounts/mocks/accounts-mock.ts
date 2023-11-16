@@ -4,6 +4,8 @@ import {
   DeleteAccountResponseDto,
   GetAccountResponseDto,
   QueryGetAccountsDto,
+  UpdateAccountDto,
+  UpdateAccountResponseDto,
 } from '../dto/accounts.dto';
 
 export const mockAccountModel = {
@@ -73,6 +75,16 @@ export const createAccountResponse1: CreateAccountResponseDto = {
 export const mockCreateAccountResponse1 = {
   _id: '1',
   toJSON: jest.fn().mockReturnValue(createAccountResponse1),
+};
+
+export const updateAccount1: UpdateAccountDto = { team: '1' };
+
+export const updateAccountResponse1: UpdateAccountResponseDto = {
+  id: '1',
+  nameAccount: 'account',
+  nameClient: 'client',
+  nameCharge: 'jose',
+  team: 'dadasdasda',
 };
 
 export const deleteAccountResponse1: DeleteAccountResponseDto = {

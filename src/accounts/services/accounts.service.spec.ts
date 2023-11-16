@@ -11,6 +11,8 @@ import {
   mockGetAccountResponseExpect,
   mockTeamService,
   queryGetAccounts1,
+  updateAccount1,
+  updateAccountResponse1,
 } from '../mocks/accounts-mock';
 import { AccountsService } from './accounts.service';
 import { TeamService } from './team.service';
@@ -80,7 +82,15 @@ describe('AccountsService', () => {
     });
   });
 
-  describe.only('updateAccountById', () => {
+  describe('updateAccountById', () => {
+    it('should update account by id', async () => {
+      const accountId = 'exampleAccountId';
+
+      accountModel.toJSON.mockResolvedValueOnce(updateAccountResponse1);
+      const result = await service.updateAccountById(accountId, updateAccount1);
+
+      expect(result).toEqual(updateAccountResponse1);
+    });
     it('should throw NotFoundException if account not found', async () => {
       accountModel.exec.mockResolvedValueOnce(null);
       await expect(
