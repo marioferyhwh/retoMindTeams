@@ -52,4 +52,14 @@ describe('AccountsService', () => {
   it('should be defined', () => {
     expect(service).toBeDefined();
   });
+
+  describe('getAllAccountsByQuery', () => {});
+
+  describe('getAccountById', () => {});
+
+  describe('createAccount', () => {});
+
+  describe('updateAccountById', () => {});
+
+  describe('deleteAccountById', () => {});
 });

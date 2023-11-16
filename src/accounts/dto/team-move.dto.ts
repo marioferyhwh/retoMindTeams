@@ -62,7 +62,7 @@ export class QueryGetTeamMovesDto extends QueryGetPaginateDto {
     example: 'true',
     type: Boolean,
   })
-  activated?: string;
+  activated?: boolean;
 }
 
 export class CreateTeamMoveDto {
@@ -103,7 +103,20 @@ export class UpdateTeamMoveDto {
   })
   endDate?: Date;
 }
-export class CreateTeamMoveResponseDto {}
+export class CreateTeamMoveResponseDto extends CreateTeamMoveDto {
+  @IsMongoId()
+  @IsNotEmpty()
+  @ApiProperty({ example: 'dasfasfas123123123f' })
+  readonly id: string;
+
+  @IsDate()
+  @ApiProperty({
+    example: '2023-11-16',
+    description: 'Date of completion or a range of dates (yyyy-mm-dd)',
+    type: Date,
+  })
+  endDate?: Date;
+}
 
 export class GetTeamMoveResponseDto extends CreateTeamMoveResponseDto {}
 export class UpdateTeamMoveResponseDto extends GetTeamMoveResponseDto {}

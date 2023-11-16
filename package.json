@@ -83,7 +83,10 @@
       ".entity.ts",
       ".module.ts",
       ".controller.ts",
-      ".constant.ts"
+      ".constant.ts",
+      "enviroments.ts",
+      "main.ts",
+      ".dto.ts"
     ]
   }
 }

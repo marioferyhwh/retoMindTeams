@@ -43,4 +43,12 @@ describe('TeamService', () => {
   it('should be defined', () => {
     expect(service).toBeDefined();
   });
+
+  describe('getAllTeamsByQuery', () => {});
+
+  describe('getTeamById', () => {});
+
+  describe('getAllTeamsByQuery', () => {});
+
+  describe('updateTeamById', () => {});
 });
