@@ -11,7 +11,6 @@ import {
   UpdateUserDto,
   UpdateUserResponseDto,
 } from '../dto/users.dto';
-import { EnglishLevel } from '../entities/user.entity';
 
 export const mockUsers1: GetUserResponseDto = {
   id: '001',
@@ -121,8 +120,6 @@ export const mockCreateUserResponseDTORoleSuperAdmin = {
 export const updateUserDTORoleUser: UpdateUserDto = {
   name: 'user3',
   password: '123',
-  englishLevel: EnglishLevel.A1,
-  technicalKnowledge: 'node',
   role: Role.User,
 };
 export const updateUserDTORoleAdmin: UpdateUserDto = {
@@ -140,8 +137,6 @@ export const updateUserResponseDTORoleUser: UpdateUserResponseDto = {
   id: '2',
   email: 'useruser@email.com',
   name: 'user1-1',
-  englishLevel: EnglishLevel.A1,
-  technicalKnowledge: 'node',
   role: Role.User,
 };
 export const updateUserResponseDTORoleAdmin: UpdateUserResponseDto = {
@@ -170,8 +165,6 @@ export const deleteUserResponseDTORoleUser: DeleteUserResponseDto = {
   id: '2',
   email: 'useruser@email.com',
   name: 'user1-1',
-  englishLevel: EnglishLevel.A1,
-  technicalKnowledge: 'node',
   role: Role.User,
 };
 
@@ -182,8 +175,6 @@ export const GetUserResponseDTO1: GetUserResponseDto = {
   id: '12dsfa',
   email: 'email3@email.com',
   name: 'user3',
-  englishLevel: EnglishLevel.A1,
-  technicalKnowledge: 'node',
   role: Role.User,
 };
 

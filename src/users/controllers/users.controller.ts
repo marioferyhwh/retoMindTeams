@@ -39,6 +39,7 @@ import {
   CreateUserDto,
   CreateUserResponseDto,
   DeleteUserResponseDto,
+  GetProfileResponseDto,
   GetUserResponseDto,
   QueryGetUsersDto,
   UpdateProfileDto,
@@ -60,8 +61,7 @@ export class UsersController {
   })
   @ApiUnauthorizedResponse({ description: 'Unauthorized' })
   @Get(GET_PROFILE)
-  getProfile(@JwtUser() jwtUser: PayloadToken): Promise<GetUserResponseDto> {
-    console.log({ jwtUser });
+  getProfile(@JwtUser() jwtUser: PayloadToken): Promise<GetProfileResponseDto> {
     return this.userService.getProfileById(jwtUser.userId);
   }
 
@@ -75,7 +75,6 @@ export class UsersController {
     @JwtUser() jwtUser: PayloadToken,
     @Body() user: UpdateProfileDto,
   ): Promise<UpdateProfileResponseDto> {
-    console.log({ jwtUser, user });
     return this.userService.updateProfileById(jwtUser.userId, user);
   }
 

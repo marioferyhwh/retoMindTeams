@@ -5,7 +5,7 @@ import { Team } from './team.entity';
 @Schema({
   toJSON: {
     transform: (_document, returnObject) => {
-      returnObject.id = returnObject._id;
+      returnObject.id = returnObject._id.toString();
       delete returnObject.__v;
       delete returnObject._id;
     },

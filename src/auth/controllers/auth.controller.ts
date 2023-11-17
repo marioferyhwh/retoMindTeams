@@ -16,7 +16,6 @@ import { AuthService } from '../services/auth.service';
 export class AuthController {
   constructor(private authService: AuthService) {}
 
-  @Post(POST_LOGIN)
   @ApiOperation({
     summary: 'Login',
     description: ``,
@@ -27,6 +26,7 @@ export class AuthController {
     type: LoginResponseDto,
   })
   @ApiUnauthorizedResponse({ description: 'Unauthorized' })
+  @Post(POST_LOGIN)
   login(@Body() loginDTO: LoginDto): Promise<LoginResponseDto> {
     return this.authService.loginUser(loginDTO);
   }

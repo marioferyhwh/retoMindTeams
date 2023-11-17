@@ -2,6 +2,7 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 
 import { comparePassword } from '../../common/utils/auth';
+import { DtoValidator } from '../../common/utils/dto-validator.util';
 import { GetUserResponseDto } from '../../users/dto/users.dto';
 import { UsersService } from '../../users/services/users.service';
 import { LoginDto, LoginResponseDto } from '../dto/auths.dto';
@@ -26,7 +27,10 @@ export class AuthService {
         userFind.password,
       );
       if (isPasswordCorrect) {
-        return userFind.toJSON();
+        return DtoValidator.createAndValidateDto(
+          GetUserResponseDto,
+          userFind.toJSON(),
+        );
       }
     }
     return null;

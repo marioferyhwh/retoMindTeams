@@ -48,26 +48,7 @@ export class CreateUserDto {
 
 export class UpdateUserDto extends PartialType(
   OmitType(CreateUserDto, ['email']),
-) {
-  @IsOptional()
-  @IsEnum(EnglishLevel)
-  @ApiProperty({ enum: EnglishLevel, example: EnglishLevel.A2 })
-  readonly englishLevel?: EnglishLevel;
-
-  @Trim()
-  @IsString()
-  @IsNotEmpty()
-  @IsOptional()
-  @ApiProperty({ example: 'node, react' })
-  readonly technicalKnowledge?: string;
-
-  @Trim()
-  @IsUrl()
-  @IsNotEmpty()
-  @IsOptional()
-  @ApiProperty({ example: 'www.google.com' })
-  readonly urlCv?: string;
-}
+) {}
 
 export class CreateUserResponseDto extends OmitType(CreateUserDto, [
   'password',
@@ -85,7 +66,12 @@ export class CreateUserResponseDto extends OmitType(CreateUserDto, [
   role: Role;
 }
 
-export class GetUserResponseDto extends CreateUserResponseDto {
+export class GetUserResponseDto extends CreateUserResponseDto {}
+
+export class UpdateUserResponseDto extends GetUserResponseDto {}
+export class DeleteUserResponseDto extends GetUserResponseDto {}
+
+export class GetProfileResponseDto extends GetUserResponseDto {
   @IsOptional()
   @IsEnum(EnglishLevel)
   @ApiProperty({ enum: EnglishLevel, example: EnglishLevel.A2 })
@@ -105,11 +91,6 @@ export class GetUserResponseDto extends CreateUserResponseDto {
   @ApiProperty({ example: 'www.google.com' })
   urlCv?: string;
 }
-
-export class UpdateUserResponseDto extends GetUserResponseDto {}
-export class DeleteUserResponseDto extends GetUserResponseDto {}
-
-export class GetProfileResponseDto extends GetUserResponseDto {}
 
 export class UpdateProfileDto extends PartialType(
   OmitType(GetProfileResponseDto, ['role', 'email', 'id']),
