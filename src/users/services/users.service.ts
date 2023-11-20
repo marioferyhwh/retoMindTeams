@@ -9,6 +9,7 @@ import { Model } from 'mongoose';
 import { Role } from '../../auth/models/roles.model';
 import { PayloadToken } from '../../auth/models/token.model';
 import { encryptPassword } from '../../common/utils/auth';
+import { DtoValidator } from '../../common/utils/dto-validator.util';
 import {
   CreateUserDto,
   CreateUserResponseDto,
@@ -39,7 +40,17 @@ export class UsersService {
       userModelFind = userModelFind.skip(offset);
     }
     const users = await userModelFind.exec();
-    return users.map((user) => user.toJSON());
+
+    const usersWithDto = await Promise.all(
+      users.map(
+        async (user) =>
+          await DtoValidator.createAndValidateDto(
+            GetUserResponseDto,
+            user.toJSON(),
+          ),
+      ),
+    );
+    return usersWithDto;
   }
 
   isUnauthorizedToEditOrSeeUser(jwtUser: PayloadToken, id: string): boolean {
@@ -69,7 +80,7 @@ export class UsersService {
     if (!user) {
       throw new NotFoundException('User not found');
     }
-    return user.toJSON();
+    return DtoValidator.createAndValidateDto(GetUserResponseDto, user.toJSON());
   }
 
   async createUser(
@@ -86,7 +97,11 @@ export class UsersService {
     }
     user = { ...user, password: await encryptPassword(user.password) };
     const saveUser = await this.userModel.create(user);
-    return saveUser.toJSON();
+
+    return DtoValidator.createAndValidateDto(
+      GetUserResponseDto,
+      saveUser.toJSON(),
+    );
   }
 
   async updateUserById(
@@ -117,7 +132,11 @@ export class UsersService {
       throw new NotFoundException('User not found');
     }
     const saveUser = await updateUser.save();
-    return saveUser.toJSON();
+
+    return DtoValidator.createAndValidateDto(
+      GetUserResponseDto,
+      saveUser.toJSON(),
+    );
   }
 
   async deleteUserById(
@@ -133,7 +152,11 @@ export class UsersService {
     if (!userOld) {
       throw new NotFoundException('User not found');
     }
-    return userOld.toJSON();
+
+    return DtoValidator.createAndValidateDto(
+      GetUserResponseDto,
+      userOld.toJSON(),
+    );
   }
 
   async getUserByEmail(email: string): Promise<User> {

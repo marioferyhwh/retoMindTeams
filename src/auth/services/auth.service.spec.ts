@@ -44,8 +44,9 @@ describe('AuthService', () => {
 
   it('should login user and return token', async () => {
     const user: any = {
-      name: '',
-      email: '',
+      id: '65468668321b83dfe5f6a9fa',
+      name: 'user',
+      email: 'user@email.com',
       password: await encryptPassword(loginUserDto.password),
       role: Role.Admin,
     };
